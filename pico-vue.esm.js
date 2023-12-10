@@ -57,19 +57,17 @@ export const Dropdown = {
   inheritAttrs: false,
   template: `<details role="list" :dir="$attrs['dir']">
     <summary aria-haspopup="listbox" :role="$attrs['role']" :class="$attrs['class']">{{ label }}</summary>
-    <ul role="listbox">
+    <ul role="listbox" @click="select">
       <slot></slot>
     </ul>
-  </details>`
-}
-
-export const DropdownItem = {
-  props: {
-    href: String
-  },
-  template: `<li>
-    <a :href="href || '#'"><slot></slot></a>
-  </li>`
+  </details>`,
+  setup(_props, { emit }) {
+    function select(ev) {
+      emit('selected', ev.target.dataset.value || ev.target.innerText)
+      ev.currentTarget.parentElement.removeAttribute('open')
+    }
+    return { select }
+  }
 }
 
 export const SmartTable = {
@@ -77,9 +75,7 @@ export const SmartTable = {
     items: Array,
     fields: Array,
     filter: Boolean,
-    striped: Boolean,
-    emptyText: String,
-    emptyFilterText: String
+    striped: Boolean
   },
   template: `<table :role="striped ? 'grid' : ''">
     <thead>
@@ -104,12 +100,12 @@ export const SmartTable = {
       </tr>
       <tr v-if="rows.length == 0">
         <td :colspan="columns.length" style="text-align:center">
-          {{ emptyFilterText || 'No results' }}
+          <slot name="emptyFilterText">No items by that filter</slot>
         </td>
       </tr>
       <tr v-else-if="items.length == 0">
         <td :colspan="columns.length" style="text-align:center">
-          {{ emptyText || 'No data' }}
+          <slot name="emptyText">No data</slot>
         </td>
       </tr>
     </tbody>
@@ -275,13 +271,6 @@ export const Tabs = {
 
     return { data }
   }
-}
-
-export const Loader = {
-  props: {
-    size: String
-  },
-  template: `<div aria-busy="true" :style="{'font-size':size || 'inherit'}"></div>`
 }
 
 const sheet = new CSSStyleSheet()
