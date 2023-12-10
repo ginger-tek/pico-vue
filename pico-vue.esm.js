@@ -7,7 +7,7 @@ export const Modal = {
   template: `<dialog ref="modal" :class="{wide}">
     <article>
       <header>
-        <span v-if="!hideCloseBtn" aria-label="Close" class="close" @click="close(modal)"></span>
+        <span v-if="!hideCloseX" aria-label="Close" class="close" @click="close(modal)"></span>
         {{ title || 'Modal' }}
       </header>
       <slot></slot>
@@ -178,34 +178,6 @@ export const Alert = {
   </div>`
 }
 
-export const NavBar = {
-  props: {
-    break: String,
-    menuLabel: {
-      type: String,
-      default: 'Menu'
-    }
-  },
-  components: { Dropdown },
-  template: `<nav>
-    <ul>
-      <li>
-        <slot name="brand"></slot>
-      </li>
-    </ul>
-    <ul class="desktop-menu">
-      <slot name="menu"></slot>
-    </ul>
-    <ul class="mobile-menu">
-      <li>
-        <dropdown class="secondary" role="link" :label="menuLabel" dir="rtl" aria-label="Menu">
-          <slot name="menu"></slot>
-        </dropdown>
-      </li>
-    </ul>
-  </nav>`
-}
-
 export const ThemeSwitch = {
   props: {
     icon: Boolean
@@ -240,6 +212,77 @@ export const ThemeSwitch = {
   }
 }
 
+export const NavBar = {
+  props: {
+    break: String,
+    menuLabel: {
+      type: String,
+      default: 'Menu'
+    }
+  },
+  components: { ThemeSwitch, Dropdown },
+  template: `<nav>
+    <ul>
+      <li>
+        <slot name="brand"></slot>
+      </li>
+    </ul>
+    <ul class="desktop-menu">
+      <slot name="menu"></slot>
+      <li>
+        <theme-switch icon></theme-switch>
+      </li>
+    </ul>
+    <ul class="mobile-menu">
+      <li>
+        <dropdown class="secondary" role="link" :label="menuLabel" dir="rtl" aria-label="Menu">
+          <slot name="menu"></slot>
+        </dropdown>
+      </li>
+      <li>
+        <theme-switch icon></theme-switch>
+      </li>
+    </ul>
+  </nav>`
+}
+
+export const Tabs = {
+  props: {
+    active: String,
+    stretch: Boolean
+  },
+  template: `<article :class="['tabs',{stretch}]">
+    <header>
+      <label v-for="t in data.tabs" :key="t.name" :class="['tab-btn',{active:t.name == data.active}]">
+        <input type="radio" v-model="data.active" :value="t.name" hidden>
+        {{ t.name }}
+      </label>
+    </header>
+    <template v-for="t in data.tabs" :key="t.name">
+      <div v-if="t.name == data.active" class="tab-content" v-html="t.content"></div>
+    </template>
+  </article>`,
+  setup(props, { slots }) {
+    const data = Vue.reactive({
+      active: props.active || null,
+      tabs: slots.default().map(c => ({
+        name: c.props.name,
+        content: c.children
+      }))
+    })
+
+    if (!data.active) data.active = data.tabs[0].name
+
+    return { data }
+  }
+}
+
+export const Loader = {
+  props: {
+    size: String
+  },
+  template: `<div aria-busy="true" :style="{'font-size':size || 'inherit'}"></div>`
+}
 
 const sheet = new CSSStyleSheet()
 sheet.replaceSync(`table thead .column {
@@ -350,6 +393,34 @@ dialog article form {
 }
 .theme-switch-icon:hover::after {
   transform: rotate(180deg);
+}
+.tabs header {
+  display: flex;
+  justify-content: flex-start;
+  gap: .5em;
+  border-bottom: 1px solid var(--muted-border-color);
+}
+.tabs.stretch header .tab-btn {
+  flex: 1;
+  text-align: center;
+}
+.tabs header .tab-btn {
+  cursor: pointer;
+  padding: 1em;
+  margin-bottom: -1em;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
+  bottom: -6px;
+  position: relative;
+  background: var(--secondary-focus);
+  border: 1px solid var(--muted-border-color);
+}
+.tabs header .tab-btn.active {
+  background: var(--card-background-color);
+  border-bottom-color: var(--card-background-color);
+}
+.tabs .tab-content {
+  overflow: auto;
 }
 @media(max-width:601px) {
   nav .desktop-menu {
