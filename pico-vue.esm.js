@@ -1,14 +1,14 @@
 export const Modal = {
   props: {
     title: String,
-    hideCloseBtn: Boolean,
+    hideCloseX: Boolean,
     wide: Boolean
   },
   template: `<dialog ref="modal" :class="{wide}">
     <article>
       <header>
         <span v-if="!hideCloseBtn" aria-label="Close" class="close" @click="close(modal)"></span>
-        {{ title }}
+        {{ title || 'Modal' }}
       </header>
       <slot></slot>
     </article>
