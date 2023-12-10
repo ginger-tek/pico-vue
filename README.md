@@ -14,7 +14,7 @@ import { Component } from 'https://cdn.jsdelivr.net/gh/ginger-tek/pico-vue/pico-
 
 import { Component } from './pico-vue.js'
 ```
-
+---
 ## Components
 All components are vanilla ESM modules that use the Vue 3 Composition API.
 
@@ -23,7 +23,7 @@ They can be used directly in both vanilla ESM modules:
 import { Modal } from 'pico-vue.js"
 
 export default {
-  template: `<modal/>`
+  template: `<modal></modal>`
   setup() {
     ...
   }
@@ -36,18 +36,23 @@ import { Modal } from 'pico-vue.js'
 </script>
 
 <template>
-  <modal/>
+  <Modal/>
 </template>
 ```
-
+---
 ## Modal
 ### Attributes
-|Attribute|Type|Details|
+|Name|Type|Details|
 |---|---|---|
 |`title`|String|Set the title in the header of the modal|
 |`id`|String|Used to control showing/closing the target modal|
 |`hide-close-x`|Boolean|Hide the default close (X) button in the top-right of the modal|
 |`wide`|Boolean|Make the modal fill the `max-width` of the modal, set by Pico|
+
+### Events
+|Name|Details|
+|---|---|
+|`closed`|Fires when the modal closes|
 
 Modals can be shown/closed via 2 methods: attributes or methods.
 To open a modal via a button, you can use the `data-show-modal` attribute, specifying the id of the modal to target:
@@ -73,9 +78,9 @@ closeModal('my-modal')
 ```
 
 ### Examples
-**Modal with AJAX form**
+*Modal with AJAX form*
 ```html
-<modal title="My modal form" id="my-modal-form" hide-close-x>
+<modal title="My modal form" id="my-modal-form" hide-close-x @closed="refreshData">
   <form @submit.prevent="submitForm">
     ...
     <div class="grid">
@@ -90,10 +95,133 @@ async function submitForm() {
   const result = apiCall(...)
   if (result == true) closeModal('my-modal-form')
 }
+
+async function refreshData() {
+  ...
+}
+```
+---
+## Dropdown
+### Attributes
+|Name|Type|Details|
+|---|---|---|
+|`label`|String|Set the select text, i.e. 'Select one...'|
+
+### Events
+|Name|Type|Details|
+|---|---|---|
+|`label`|String|Set the select text, i.e. 'Select one...'|
+
+### Examples
+```html
+<dropdown>
+  <li>One</li>
+  <li>Two</li>
+</dropdown>
+```
+---
+## SmartTable
+### Attributes
+|Attribute|Type|Details|
+|---|---|---|
+|`items`|Array|Data to render on the table|
+|`fields`|Array|Specify which fields to show as columns|
+|`filter`|Boolean|Shows type-to-search column filters in the table header|
+|`striped`|Boolean|Adds a striped styling to the table rows|
+
+Provides an interactive table with filtering and sorting.
+
+### Examples
+*Simple*
+```html
+<smart-table :items="data"></smart-table>
 ```
 
-## Dropdown/DropdownItem
-## SmartTable
+*Specific Fields*
+
+By default, columns will be automatically determined based on the row properties
+```html
+<smart-table :items="data" :fields="fields"></smart-table>
+```
+```js
+const fields = [
+  'firstname',
+  'lastName',
+  { name: 'createdOn', label: 'Created' },
+  { name: 'invoiceTotal', label: 'Total', align: 'right' }
+]
+```
+
+Enable Column Filtering
+```html
+<smart-table :items="data" filter></smart-table>
+```
+
+Custom Empty Text/HTML
+```html
+<smart-table :items="data">
+  <template #emptyText>
+    <span style="color:red">No data at all, muchacho!</span>
+  </template>
+</smart-table>
+```
+
+Custom Empty Filter Text/HTML
+```html
+<smart-table :items="data" filter>
+  <template #emptyFilterText>
+    <i>No result for that. Try again, buddy<i>
+  </template>
+</smart-table>
+```
+---
 ## Alert
-## NavBar
+### Attributes
+|Name|Type|Details|
+|---|---|---|
+|`type`|String|Set the select text, i.e. 'Select one...'|
+
+### Examples
+```html
+<alert type="error">Oh no! Something went wrong!</alert>
+```
+---
 ## ThemeSwitch
+### Attributes
+|Name|Type|Details|
+|---|---|---|
+|`icon`|Boolean|Set the select text, i.e. 'Select one...'|
+
+### Examples
+```html
+<theme-switch></theme-switch>
+<theme-switch icon></theme-switch>
+```
+---
+## NavBar
+### Attributes
+|Name|Type|Details|
+|---|---|---|
+|`label`|String|Set the select text, i.e. 'Select one...'|
+
+### Examples
+```html
+<dropdown>
+  <li>One</li>
+  <li>Two</li>
+</dropdown>
+```
+---
+## Tabs
+### Attributes
+|Name|Type|Details|
+|---|---|---|
+|`label`|String|Set the select text, i.e. 'Select one...'|
+
+### Examples
+```html
+<dropdown>
+  <li>One</li>
+  <li>Two</li>
+</dropdown>
+```
