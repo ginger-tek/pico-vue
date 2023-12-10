@@ -1,5 +1,8 @@
+<img src="https://raw.githubusercontent.com/picocss/pico/master/.github/logo.svg" width="48px"><img src="https://vuejs.org/images/logo.png" width="48px">
+
 # pico-vue
-[Vue 3](https://vuejs.org) component library for use with [Pico CSS](https://picocss.com/)
+
+**[Vue 3](https://vuejs.org) component library for use with [Pico CSS](https://picocss.com/) framework**
 
 ## Get Started
 It is recommended to already be familiar with Pico CSS, as the components utilize the same semantic HTML, attributes, and classes. You can review the docs [here](https://picocss.com/docs) if necessary.
