@@ -1,5 +1,5 @@
 # pico-vue
-[Vue 3](https://vuejs.org) component library to use with [Pico CSS](https://picocss.com/)
+[Vue 3](https://vuejs.org) component library for use with [Pico CSS](https://picocss.com/)
 
 ## Get Started
 It is recommended to already be familiar with Pico CSS, as the components utilize the same semantic HTML, attributes, and classes. You can review the docs [here](https://picocss.com/docs) if necessary.
