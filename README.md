@@ -54,7 +54,8 @@ import { Modal } from 'pico-vue.js'
 |---|---|
 |`closed`|Fires when the modal closes|
 
-Modals can be shown/closed via 2 methods: attributes or methods.
+Modals can be shown/closed either by **data attributes** or **global helper functions**.
+
 To open a modal via a button, you can use the `data-show-modal` attribute, specifying the id of the modal to target:
 ```html
 <modal title="My Modal" id="my-modal">
@@ -71,7 +72,7 @@ To add a custom close button, add a button element with the `data-close-modal` a
 </modal>
 ```
 
-There are also global window functions to show and close modals programmatically:
+To open or close a modal programmatically, use the global window functions `showModal()` or `closeModal()`, which take the id of the target modal as an argument:
 ```js
 showModal('my-modal')
 closeModal('my-modal')
@@ -131,6 +132,8 @@ async function refreshData() {
 
 Provides an interactive table with filtering and sorting.
 
+By default, columns will be automatically determined based on the row properties, but you can use the `fields` attribute to specify the columnds to be shown.
+
 ### Examples
 *Simple*
 ```html
@@ -138,8 +141,6 @@ Provides an interactive table with filtering and sorting.
 ```
 
 *Specific Fields*
-
-By default, columns will be automatically determined based on the row properties
 ```html
 <smart-table :items="data" :fields="fields"></smart-table>
 ```
@@ -152,12 +153,12 @@ const fields = [
 ]
 ```
 
-Enable Column Filtering
+*Enable Column Filtering*
 ```html
 <smart-table :items="data" filter></smart-table>
 ```
 
-Custom Empty Text/HTML
+*Custom Empty Text/HTML*
 ```html
 <smart-table :items="data">
   <template #emptyText>
@@ -166,7 +167,7 @@ Custom Empty Text/HTML
 </smart-table>
 ```
 
-Custom Empty Filter Text/HTML
+*Custom Empty Filter Text/HTML*
 ```html
 <smart-table :items="data" filter>
   <template #emptyFilterText>
