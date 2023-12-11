@@ -112,9 +112,9 @@ async function refreshData() {
 |`label`|String|Set the select text, i.e. 'Select one...'|
 
 ### Events
-|Name|Type|Details|
-|---|---|---|
-|`label`|String|Set the select text, i.e. 'Select one...'|
+|Name|Details|
+|---|---|
+|`selected`|Fires when the an option is clicked|
 
 ### Examples
 ```html
@@ -132,10 +132,11 @@ async function refreshData() {
 |`fields`|Array|Specify which fields to show as columns|
 |`filter`|Boolean|Shows type-to-search column filters in the table header|
 |`striped`|Boolean|Adds a striped styling to the table rows|
+|`bordered`|Boolean|Adds an outside border styling to the table wrapper|
 
-Provides an interactive table with filtering and sorting.
+Provides an interactive, responsive table with filtering and sorting.
 
-By default, columns will be automatically determined based on the row properties, but you can use the `fields` attribute to specify the columnds to be shown.
+Columns are automatically generated based on the object properties in the array, but you can use the `fields` attribute to only show the columns specified.
 
 ### Examples
 *Simple*
@@ -183,18 +184,23 @@ const fields = [
 ### Attributes
 |Name|Type|Details|
 |---|---|---|
-|`type`|String|Set the select text, i.e. 'Select one...'|
+|`type`|String|Sets the background color of the alert based on alert category. Valid options are `success` (green), `info` (cyan), `warning` (yellow), and `error` (red). Defaults to secondary color background when not specified|
+
+Alerts with no content are hidden by default, and will show when content is added
 
 ### Examples
 ```html
-<alert type="error">Oh no! Something went wrong!</alert>
+<alert type="error"></alert> <!-- hidden -->
+<alert type="error">Oh no! Something went wrong!</alert> <!-- shown -->
 ```
 ---
 ## ThemeSwitch
 ### Attributes
 |Name|Type|Details|
 |---|---|---|
-|`icon`|Boolean|Set the select text, i.e. 'Select one...'|
+|`icon`|Boolean|Show an icon instead of a checkbox switch input|
+
+Toggles and loads the value of `localStorage.theme` key if present. Will use to `prefers-color-scheme` value to determine theme on first-time load, or when `localStorage.theme` is cleared.
 
 ### Examples
 ```html
@@ -206,14 +212,35 @@ const fields = [
 ### Attributes
 |Name|Type|Details|
 |---|---|---|
-|`label`|String|Set the select text, i.e. 'Select one...'|
+|`breakpoint`|String|Sets the screen width at which the collapsed menu will appear. Valid options are `sm` (575px), `md` (768px), `lg` (991px), and `xl` (1199px). Defaults to `md`|
+
+Provides a responsive navigation bar, with built-in collapsable menu.
 
 ### Examples
 ```html
-<dropdown>
-  <li>One</li>
-  <li>Two</li>
-</dropdown>
+<nav-bar>
+  <template #brand>
+    <router-link to="/">Home</router-link>
+  </template>
+  <template #menu>
+    <template v-if="store.session">
+      <li>
+        <router-link to="/projects">Projects</router-link>
+      </li>
+      <li>
+        <router-link to="/logout">Logout</router-link>
+      </li>
+    </template>
+    <template v-else>
+      <li>
+        <router-link to="/login">Login</router-link>
+      </li>
+    </template>
+    <li>
+      <theme-switch icon> Theme</theme-switch>
+    </li>
+  </template>
+</nav-bar>
 ```
 ---
 ## Tabs
@@ -224,8 +251,15 @@ const fields = [
 
 ### Examples
 ```html
-<dropdown>
-  <li>One</li>
-  <li>Two</li>
-</dropdown>
+<tabs>
+  <tab title="My First Tab">
+    ...
+  </tab>
+  <tab title="My Second Tab">
+    ...
+  </tab>
+  <tab title="My Third Tab">
+    ...
+  </tab>
+</tabs>
 ```
