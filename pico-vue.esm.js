@@ -75,41 +75,44 @@ export const SmartTable = {
     items: Array,
     fields: Array,
     filter: Boolean,
-    striped: Boolean
+    striped: Boolean,
+    bordered: Boolean
   },
-  template: `<table :role="striped ? 'grid' : ''">
-    <thead>
-      <tr>
-        <th v-for="col in columns" :key="col.name">
-          <div class="column">
-            <input v-if="filter" class="column-filter compact" type="text" v-model="data.filterCols[col.name]" :placeholder="col.label">
-            <span v-else :class="['column-label',{active:data.sortBy == col.name}]">{{ col.label }}</span>
-            <div class="sorter">
-              <div @click="sortAsc(col.name)" :class="['sort asc',{active:data.sortBy == col.name && data.sortDir == 1}]"></div>
-              <div @click="sortDesc(col.name)" :class="['sort desc',{active:data.sortBy == col.name && data.sortDir == -1}]"></div>
+  template: `<figure :class="{bordered}">
+    <table :role="striped ? 'grid' : ''">
+      <thead>
+        <tr>
+          <th v-for="col in columns" :key="col.name">
+            <div class="column">
+              <input v-if="filter" class="column-filter compact" type="text" v-model="data.filterCols[col.name]" :placeholder="col.label">
+              <span v-else :class="['column-label',{active:data.sortBy == col.name}]">{{ col.label }}</span>
+              <div class="sorter">
+                <div @click="sortAsc(col.name)" :class="['sort asc',{active:data.sortBy == col.name && data.sortDir == 1}]"></div>
+                <div @click="sortDesc(col.name)" :class="['sort desc',{active:data.sortBy == col.name && data.sortDir == -1}]"></div>
+              </div>
             </div>
-          </div>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(row,rx) in rows" :key="'r'+rx">
-        <td v-for="col in columns" :key="col.name" :style="{ 'text-align': col.align || 'inherit' }">
-          <slot :name="col.name.toLowerCase()" :="row">{{ row[col.name] }}</slot>
-        </td>
-      </tr>
-      <tr v-if="rows.length == 0">
-        <td :colspan="columns.length" style="text-align:center">
-          <slot name="emptyFilterText">No items by that filter</slot>
-        </td>
-      </tr>
-      <tr v-else-if="items.length == 0">
-        <td :colspan="columns.length" style="text-align:center">
-          <slot name="emptyText">No data</slot>
-        </td>
-      </tr>
-    </tbody>
-  </table>`,
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(row,rx) in rows" :key="'r'+rx">
+          <td v-for="col in columns" :key="col.name" :style="{ 'text-align': col.align || 'inherit' }">
+            <slot :name="col.name.toLowerCase()" :="row">{{ row[col.name] }}</slot>
+          </td>
+        </tr>
+        <tr v-if="rows.length == 0">
+          <td :colspan="columns.length" style="text-align:center">
+            <slot name="emptyFilterText">No items by that filter</slot>
+          </td>
+        </tr>
+        <tr v-else-if="items.length == 0">
+          <td :colspan="columns.length" style="text-align:center">
+            <slot name="emptyText">No data</slot>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </figure>`,
   setup(props) {
     const data = Vue.reactive({
       sortBy: '',
@@ -178,12 +181,13 @@ export const ThemeSwitch = {
   props: {
     icon: Boolean
   },
-  template: `<div class="theme-switch-wrap">
+  template: `<label class="theme-switch-wrap">
     <input id="theme-switch" type="checkbox" role="switch" v-model="data.theme" true-value="dark" false-value="light" :hidden="icon">
-    <label v-if="icon" for="theme-switch">
+    <span v-if="icon" for="theme-switch">
       <div class="theme-switch-icon contrast"></div>
-    </label>
-  </div>`,
+    </span>&nbsp;
+    <slot></slot>
+  </label>`,
   setup() {
     const data = Vue.reactive({
       theme: null
@@ -210,14 +214,16 @@ export const ThemeSwitch = {
 
 export const NavBar = {
   props: {
-    break: String,
+    breakAt: {
+      type: String,
+      default: 'md'
+    },
     menuLabel: {
       type: String,
       default: 'Menu'
     }
   },
-  components: { ThemeSwitch, Dropdown },
-  template: `<nav>
+  template: `<nav :class="['nav-bar',breakAt]">
     <ul>
       <li>
         <slot name="brand"></slot>
@@ -225,51 +231,57 @@ export const NavBar = {
     </ul>
     <ul class="desktop-menu">
       <slot name="menu"></slot>
-      <li>
-        <theme-switch icon></theme-switch>
-      </li>
     </ul>
     <ul class="mobile-menu">
       <li>
-        <dropdown class="secondary" role="link" :label="menuLabel" dir="rtl" aria-label="Menu">
-          <slot name="menu"></slot>
-        </dropdown>
-      </li>
-      <li>
-        <theme-switch icon></theme-switch>
+        <details role="list" dir="rtl">
+          <summary aria-haspopup="listbox" role="link" class="menu-btn">
+            <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="1.2rem" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </summary>
+          <ul role="listbox" dir="ltr">
+            <slot name="menu"></slot>
+          </ul>
+        </details>
       </li>
     </ul>
   </nav>`
 }
 
+export const Tab = {
+  props: {
+    title: String
+  },
+  template: `<div class="tab-content" v-if="title == activeTab">
+    <slot></slot>
+  </div>`,
+  setup() {
+    const activeTab = Vue.inject('activeTab')
+    return { activeTab }
+  }
+}
+
 export const Tabs = {
   props: {
-    active: String,
+    activeTab: String,
     stretch: Boolean
   },
   template: `<article :class="['tabs',{stretch}]">
     <header>
-      <label v-for="t in data.tabs" :key="t.name" :class="['tab-btn',{active:t.name == data.active}]">
-        <input type="radio" v-model="data.active" :value="t.name" hidden>
-        {{ t.name }}
-      </label>
+      <ul>
+        <li v-for="title in tabBtns" :key="title" @click="activeTab = title" :class="['tab-btn',{active:activeTab == title}]">
+          {{ title }}
+        </li>
+      </ul>
     </header>
-    <template v-for="t in data.tabs" :key="t.name">
-      <div v-if="t.name == data.active" class="tab-content" v-html="t.content"></div>
-    </template>
+    <slot></slot>
   </article>`,
-  setup(props, { slots }) {
-    const data = Vue.reactive({
-      active: props.active || null,
-      tabs: slots.default().map(c => ({
-        name: c.props.name,
-        content: c.children
-      }))
-    })
+  setup(_props, { slots }) {
+    const tabBtns = Vue.ref(slots.default().map(t => t.props.title))
+    const activeTab = Vue.ref(tabBtns.value[0])
 
-    if (!data.active) data.active = data.tabs[0].name
+    Vue.provide('activeTab', activeTab)
 
-    return { data }
+    return { activeTab, tabBtns }
   }
 }
 
@@ -311,7 +323,14 @@ table thead .sort:hover:before,
 table thead .sort.active:before {
   content: var(--icon-chevron);
 }
-.compact:where(input:not([type=checkbox],[type=radio],[type=range]),select,textarea) {
+figure:has(table).bordered {
+  border: 1px solid var(--table-border-color);
+  border-radius: var(--border-radius);
+}
+figure.bordered table {
+  margin-bottom: 0;
+}
+.compact:where(input:not([type=checkbox],[type=radio],[type=range])) {
   padding: calc(0.75 * var(--form-element-spacing-vertical)) calc(0.75 * var(--form-element-spacing-horizontal)) !important;
   height: calc(0.5rem * var(--line-height) + var(--form-element-spacing-vertical) * 1.75 + var(--border-width) * 1.75) !important;
 }
@@ -364,15 +383,18 @@ dialog article form {
 .theme-switch-wrap {
   display: inline-block;
   border-bottom: none !important;
-}
-.theme-switch-wrap[data-tooltip] {
   cursor: pointer;
+}
+.theme-switch-icon {
+  display: inline-block;
 }
 .theme-switch-icon:after {
   color: var(--contrast);
   display: inline-block;
   width: 1rem;
   height: 1rem;
+  position: relative;
+  top: 0.1rem;
   border: 0.15rem solid currentColor;
   border-radius: 50%;
   background: linear-gradient(to right,currentColor 0,currentColor 50%,transparent 50%);
@@ -380,27 +402,32 @@ dialog article form {
   transition: transform var(--transition);
   vertitcal-align: middle;
 }
-.theme-switch-icon:hover::after {
+.theme-switch-wrap:hover .theme-switch-icon::after {
   transform: rotate(180deg);
 }
 .tabs header {
+  padding-bottom: 0;
+  border-bottom: 1px solid var(--muted-border-color);
+}
+.tabs header ul {
   display: flex;
   justify-content: flex-start;
   gap: .5em;
-  border-bottom: 1px solid var(--muted-border-color);
+  margin-bottom: 0;
+  padding: 0;
 }
-.tabs.stretch header .tab-btn {
+.tabs.stretch header ul .tab-btn {
   flex: 1;
   text-align: center;
 }
-.tabs header .tab-btn {
+.tabs header ul .tab-btn {
+  display: inline-block;
+  list-style-type: none;
   cursor: pointer;
   padding: 1em;
-  margin-bottom: -1em;
+  margin-bottom: calc(var(--font-size) - 1.07em);
   border-top-right-radius: var(--border-radius);
   border-top-left-radius: var(--border-radius);
-  bottom: -6px;
-  position: relative;
   background: var(--secondary-focus);
   border: 1px solid var(--muted-border-color);
 }
@@ -411,19 +438,61 @@ dialog article form {
 .tabs .tab-content {
   overflow: auto;
 }
-@media(max-width:601px) {
-  nav .desktop-menu {
+.nav-bar .menu-btn {
+  align-items: center;
+  padding: .65rem;
+}
+.nav-bar .menu-btn:after {
+  display: none;
+}
+
+@media(max-width:577px) {
+  .nav-bar.sm .desktop-menu {
     display: none;
   }
-  nav .mobile-menu {
+  .nav-bar.sm .mobile-menu {
     display: inherit;
   }
 }
-@media(min-width:600px) {
-  nav .desktop-menu {
+@media(min-width:576px) {
+  .nav-bar.sm .desktop-menu {
     display: inherit;
   }
-  nav .mobile-menu {
+  .nav-bar.sm .mobile-menu {
+    display: none;
+  }
+}
+
+@media(max-width:768px) {
+  .nav-bar.md .desktop-menu {
+    display: none;
+  }
+  .nav-bar.md .mobile-menu {
+    display: inherit;
+  }
+}
+@media(min-width:767px) {
+  .nav-bar.md .desktop-menu {
+    display: inherit;
+  }
+  .nav-bar.md .mobile-menu {
+    display: none;
+  }
+}
+
+@media(max-width:577px) {
+  .nav-bar.lg .desktop-menu {
+    display: none;
+  }
+  .nav-bar.lg .mobile-menu {
+    display: inherit;
+  }
+}
+@media(min-width:576px) {
+  .nav-bar.lg .desktop-menu {
+    display: inherit;
+  }
+  .nav-bar.lg .mobile-menu {
     display: none;
   }
 }`)
