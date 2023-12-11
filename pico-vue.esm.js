@@ -214,7 +214,7 @@ export const ThemeSwitch = {
 
 export const NavBar = {
   props: {
-    breakAt: {
+    breakpoint: {
       type: String,
       default: 'md'
     },
@@ -223,7 +223,7 @@ export const NavBar = {
       default: 'Menu'
     }
   },
-  template: `<nav :class="['nav-bar',breakAt]">
+  template: `<nav :class="['nav-bar',breakpoint]">
     <ul>
       <li>
         <slot name="brand"></slot>
@@ -268,16 +268,16 @@ export const Tabs = {
   template: `<article :class="['tabs',{stretch}]">
     <header>
       <ul>
-        <li v-for="title in tabBtns" :key="title" @click="activeTab = title" :class="['tab-btn',{active:activeTab == title}]">
-          {{ title }}
+        <li v-for="tabBtn in tabBtns" :key="tabBtn.title" @click="activeTab = tabBtn.title" :class="['tab-btn',{active:activeTab == tabBtn.title}]" role="button" :disabled="tabBtn.disabled">
+          {{ tabBtn.title }}
         </li>
       </ul>
     </header>
     <slot></slot>
   </article>`,
   setup(_props, { slots }) {
-    const tabBtns = Vue.ref(slots.default().map(t => t.props.title))
-    const activeTab = Vue.ref(tabBtns.value[0])
+    const tabBtns = Vue.ref(slots.default().map(t => t.props))
+    const activeTab = Vue.ref(tabBtns.value[0].title)
 
     Vue.provide('activeTab', activeTab)
 
@@ -365,20 +365,24 @@ dialog article form {
   display: block;
   padding: var(--form-element-spacing-vertical) var(--form-element-spacing-horizontal);
   border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(0,0,0,.25);
   margin-bottom: var(--spacing);
-  background: #039be5;
-  color: #fff;
+  background: var(--secondary);
+  font-weight: bold;
+  color: rgba(255,255,255,.85);
 }
 [role=alert].success {
-  background: #43a047;
+  background: #65ab68;
+}
+[role=alert].info {
+  background: #24c5c5;
 }
 [role=alert].warning {
-  background: #fdd835;
-  color: #000;
+  background: #ffeb59;
+  color: rgba(0,0,0,.65);
 }
 [role=alert].error {
-  background: #e53935;
+  background: #d73737;
 }
 .theme-switch-wrap {
   display: inline-block;
@@ -428,6 +432,8 @@ dialog article form {
   margin-bottom: calc(var(--font-size) - 1.07em);
   border-top-right-radius: var(--border-radius);
   border-top-left-radius: var(--border-radius);
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
   background: var(--secondary-focus);
   border: 1px solid var(--muted-border-color);
 }
@@ -446,7 +452,7 @@ dialog article form {
   display: none;
 }
 
-@media(max-width:577px) {
+@media(max-width:575px) {
   .nav-bar.sm .desktop-menu {
     display: none;
   }
@@ -463,7 +469,7 @@ dialog article form {
   }
 }
 
-@media(max-width:768px) {
+@media(max-width:767px) {
   .nav-bar.md .desktop-menu {
     display: none;
   }
@@ -471,7 +477,7 @@ dialog article form {
     display: inherit;
   }
 }
-@media(min-width:767px) {
+@media(min-width:768px) {
   .nav-bar.md .desktop-menu {
     display: inherit;
   }
@@ -480,7 +486,7 @@ dialog article form {
   }
 }
 
-@media(max-width:577px) {
+@media(max-width:991px) {
   .nav-bar.lg .desktop-menu {
     display: none;
   }
@@ -488,11 +494,28 @@ dialog article form {
     display: inherit;
   }
 }
-@media(min-width:576px) {
+@media(min-width:992px) {
   .nav-bar.lg .desktop-menu {
     display: inherit;
   }
   .nav-bar.lg .mobile-menu {
+    display: none;
+  }
+}
+
+@media(max-width:1199px) {
+  .nav-bar.xl .desktop-menu {
+    display: none;
+  }
+  .nav-bar.xl .mobile-menu {
+    display: inherit;
+  }
+}
+@media(min-width:1200px) {
+  .nav-bar.xl .desktop-menu {
+    display: inherit;
+  }
+  .nav-bar.xl .mobile-menu {
     display: none;
   }
 }`)
