@@ -243,11 +243,17 @@ Provides a responsive navigation bar, with built-in collapsable menu.
 </nav-bar>
 ```
 ---
-## Tabs
-### Attributes
+## Tabs/Tab
+### Tabs Attributes
 |Name|Type|Details|
 |---|---|---|
-|`label`|String|Set the select text, i.e. 'Select one...'|
+|`stretch`|Boolean|Makes all tab buttons stretch to fill the tab header|
+
+### Tab Attributes
+|Name|Type|Details|
+|---|---|---|
+|`title`|String|Makes all tab buttons stretch to fill the tab header|
+|`disabled`|Boolean|Disables the tab from being selectable|
 
 ### Examples
 ```html
@@ -255,7 +261,7 @@ Provides a responsive navigation bar, with built-in collapsable menu.
   <tab title="My First Tab">
     ...
   </tab>
-  <tab title="My Second Tab">
+  <tab title="My Second Tab" disabled>
     ...
   </tab>
   <tab title="My Third Tab">
