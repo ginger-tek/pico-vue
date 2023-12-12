@@ -216,6 +216,8 @@ Toggles and loads the value of `localStorage.theme` key if present. Will use to 
 
 Provides a responsive navigation bar, with built-in collapsable menu.
 
+There are 2 named slots for content. Use `#brand` to define your "Home"/Logo content, and `#menu` to define your navigable links that will responsively collapse when applicable.
+
 ### Examples
 ```html
 <nav-bar>
@@ -223,19 +225,15 @@ Provides a responsive navigation bar, with built-in collapsable menu.
     <router-link to="/">Home</router-link>
   </template>
   <template #menu>
-    <template v-if="store.session">
-      <li>
-        <router-link to="/projects">Projects</router-link>
-      </li>
-      <li>
-        <router-link to="/logout">Logout</router-link>
-      </li>
-    </template>
-    <template v-else>
-      <li>
-        <router-link to="/login">Login</router-link>
-      </li>
-    </template>
+    <li>
+      <router-link to="/projects">Projects</router-link>
+    </li>
+    <li>
+      <router-link to="/logout">Logout</router-link>
+    </li>
+    <li>
+      <router-link to="/login">Login</router-link>
+    </li>
     <li>
       <theme-switch icon> Theme</theme-switch>
     </li>
