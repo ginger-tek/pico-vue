@@ -321,26 +321,40 @@ export const Tabs = {
 
 const sheet = new CSSStyleSheet()
 sheet.replaceSync(`/* Global */
+:root {
+  --success: #3e7b40;
+  --info: #24c5c5;
+  --warning: #ffeb59;
+  --error: #d73737;
+}
+
 .compact:where(input:not([type=checkbox], [type=radio], [type=range]), select, textarea, button, [role=button]) {
   padding: calc(0.75 * var(--form-element-spacing-vertical)) calc(0.75 * var(--form-element-spacing-horizontal)) !important;
   height: calc(0.5rem * var(--line-height) + var(--form-element-spacing-vertical) * 1.75 + var(--border-width) * 1.75) !important;
 }
 
 .success {
-  background: #65ab68 !important;
+  --background-color: var(--success);
 }
 
 .info {
-  background: #24c5c5 !important;
+  --background-color: var(--info);
+  --color: rgba(0, 0, 0, .75);
 }
 
 .warning {
-  background: #ffeb59 !important;
-  color: rgba(0, 0, 0, .75) !important;
+  --background-color: var(--warning);
+  --color: rgba(0, 0, 0, .75);
 }
 
 .error {
-  background: #d73737 !important;
+  --background-color: var(--error);
+}
+
+label:has([required]:where(input:not([type=radio],[type=checkbox],[type=range])),select,textarea):before {
+  display: inline-block;
+  content: '*';
+  color: var(--error);
 }
 
 /* Smart Table */
@@ -406,7 +420,7 @@ dialog {
 }
 
 dialog.wide article {
-  width: 100%;
+  max-width: 100%;
 }
 
 dialog article header .close {
@@ -415,6 +429,8 @@ dialog article header .close {
 
 dialog article {
   padding-bottom: 1rem;
+  width: 100%;
+  max-width: 400px;
 }
 
 dialog article header {
