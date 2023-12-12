@@ -83,7 +83,6 @@ export const SmartTable = {
     bordered: Boolean
   },
   template: `<figure :class="{bordered}">
-    {{ data }}
     <table :role="striped ? 'grid' : ''">
       <thead>
         <tr>
@@ -292,37 +291,31 @@ export const Tab = {
   props: {
     title: String
   },
-  template: `<div class="tab-content" v-if="title == activeTab">
+  template: `<div class="tab-content">
     <slot></slot>
-  </div>`,
-  setup() {
-    const activeTab = Vue.inject('activeTab')
-    return { activeTab }
-  }
+  </div>`
 }
 
 export const Tabs = {
   props: {
-    activeTab: String,
     stretch: Boolean
   },
   template: `<article :class="['tabs',{stretch}]">
     <header>
       <ul>
-        <li v-for="tabBtn in tabBtns" :key="tabBtn.title" @click="activeTab = tabBtn.title" :class="['tab-btn',{active:activeTab == tabBtn.title}]" role="button" :disabled="tabBtn.disabled">
-          {{ tabBtn.title }}
+        <li v-for="(s,i) in slots.default()" :key="i" @click="active = i" :class="['tab-btn',{active:active == i}]" role="button" :disabled="s.props.disabled">
+          {{ s.props.title }}
         </li>
       </ul>
     </header>
-    <slot></slot>
+    <div class="tab-content-wrap">
+      <component :is="slots.default()[active]"></component>
+    </div>
   </article>`,
-  setup(_props, { slots }) {
-    const tabBtns = Vue.ref(slots.default().map(t => t.props))
-    const activeTab = Vue.ref(tabBtns.value[0].title)
-
-    Vue.provide('activeTab', activeTab)
-
-    return { activeTab, tabBtns }
+  setup() {
+    const slots = Vue.useSlots()
+    const active = Vue.ref(0)
+    return { active, slots }
   }
 }
 
@@ -532,7 +525,7 @@ dialog article form {
   border-bottom-color: var(--card-background-color);
 }
 
-.tabs .tab-content {
+.tabs .tab-content-wrap {
   overflow: auto;
 }
 
