@@ -28,16 +28,20 @@ export const Modal = {
       doc.classList.add('modal-is-closing')
       setTimeout(() => {
         doc.classList.remove('modal-is-closing', 'modal-is-open')
-        el.close()
+        el?.close()
         Vue.nextTick(() => emit('closed'))
       }, duration)
     }
 
     Vue.onMounted(() => {
-      modal.value.addEventListener('cancel', (ev) => {
+      const cancel = (ev) => {
         ev.preventDefault()
         close(ev.target)
-      })
+      }
+      // for some reason, the dialog cancel event doesn't fire all the time when it should
+      // so adding a keydown listener for the 'Escape' key as a fallback
+      modal.value.addEventListener('keydown', (e) => { if (e.key == 'Escape') cancel(e) })
+      modal.value.addEventListener('cancel', cancel)
       if (!window.showModal)
         window.showModal = (id) => show(document.getElementById(id))
       if (!window.closeModal)
@@ -402,6 +406,10 @@ figure.bordered table {
 }
 
 /* Modal (Dialog) */
+dialog {
+  outline: none;
+}
+
 dialog.wide article {
   width: 100%;
 }
