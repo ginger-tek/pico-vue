@@ -177,6 +177,43 @@ export const Alert = {
   </div>`
 }
 
+export const Toaster = {
+  props: {
+    width: {
+      type: String,
+      default: '500px'
+    },
+    position: {
+      type: String,
+      default: 'bottom-left'
+    }
+  },
+  template: `<div :class="['toaster',position]" ref="toaster" :style="{'max-width':width}"></div>`,
+  setup() {
+    const toaster = Vue.ref(null)
+    const duration = 5000
+    const fade = 201
+
+    Vue.onMounted(() => {
+      window.closeToast = (e) => {
+        const el = e.target || e
+        el?.classList.remove('show')
+        setTimeout(() => el?.remove(), fade)
+      }
+      window.appendToast = ({ content, stay = false, type = false }) => {
+        const toast = document.createElement('div')
+        toast.classList.add('toast', type)
+        toast.innerHTML = `<div>${content}</div><span class="close" onclick="closeToast(this.parentElement)"></span>`
+        toaster.value.appendChild(toast)
+        setTimeout(() => toast.classList.add('show'), 1)
+        if (!stay) setTimeout(() => closeToast(toast), duration)
+      }
+    })
+
+    return { toaster }
+  }
+}
+
 export const ThemeSwitch = {
   props: {
     icon: Boolean
@@ -184,8 +221,8 @@ export const ThemeSwitch = {
   template: `<label class="theme-switch-wrap">
     <input id="theme-switch" type="checkbox" role="switch" v-model="data.theme" true-value="dark" false-value="light" :hidden="icon">
     <span v-if="icon" for="theme-switch">
-      <div class="theme-switch-icon contrast"></div>
-    </span>&nbsp;
+      <div class="theme-switch-icon"></div>
+    </span>
     <slot></slot>
   </label>`,
   setup() {
@@ -286,7 +323,26 @@ export const Tabs = {
 }
 
 const sheet = new CSSStyleSheet()
-sheet.replaceSync(`table thead .column {
+sheet.replaceSync(`/* Global */
+.compact:where(input:not([type=checkbox],[type=radio],[type=range]),select,textarea,button,[role=button]) {
+  padding: calc(0.75 * var(--form-element-spacing-vertical)) calc(0.75 * var(--form-element-spacing-horizontal)) !important;
+  height: calc(0.5rem * var(--line-height) + var(--form-element-spacing-vertical) * 1.75 + var(--border-width) * 1.75) !important;
+}
+.success {
+  background: #65ab68 !important;
+}
+.info {
+  background: #24c5c5 !important;
+}
+.warning {
+  background: #ffeb59 !important;
+  color: rgba(0,0,0,.75) !important;
+}
+.error {
+  background: #d73737 !important;
+}
+/* Smart Table */
+table thead .column {
   display: flex;
   align-items: center;
 }
@@ -330,10 +386,7 @@ figure:has(table).bordered {
 figure.bordered table {
   margin-bottom: 0;
 }
-.compact:where(input:not([type=checkbox],[type=radio],[type=range])) {
-  padding: calc(0.75 * var(--form-element-spacing-vertical)) calc(0.75 * var(--form-element-spacing-horizontal)) !important;
-  height: calc(0.5rem * var(--line-height) + var(--form-element-spacing-vertical) * 1.75 + var(--border-width) * 1.75) !important;
-}
+/* Modal (Dialog) */
 dialog.wide article {
   width: 100%;
 }
@@ -349,6 +402,7 @@ dialog article header {
 dialog article form {
   margin-bottom: 0;
 }
+/* Flex Row */
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -358,6 +412,7 @@ dialog article form {
   width: auto;
   flex: 1;
 }
+/* Alert */
 [role=alert]:empty {
   display: none;
 }
@@ -365,35 +420,25 @@ dialog article form {
   display: block;
   padding: var(--form-element-spacing-vertical) var(--form-element-spacing-horizontal);
   border-radius: var(--border-radius);
-  border: 1px solid rgba(0,0,0,.25);
+  border: 1px solid rgba(0,0,0,.15);
   margin-bottom: var(--spacing);
   background: var(--secondary);
-  font-weight: bold;
-  color: rgba(255,255,255,.85);
+  font-weight: 400;
+  color: rgba(255,255,255,.9);
 }
-[role=alert].success {
-  background: #65ab68;
-}
-[role=alert].info {
-  background: #24c5c5;
-}
-[role=alert].warning {
-  background: #ffeb59;
-  color: rgba(0,0,0,.65);
-}
-[role=alert].error {
-  background: #d73737;
-}
+/* Theme Switch */
 .theme-switch-wrap {
   display: inline-block;
   border-bottom: none !important;
   cursor: pointer;
+  color: inherit;
 }
 .theme-switch-icon {
+  color: inherit;
   display: inline-block;
 }
 .theme-switch-icon:after {
-  color: var(--contrast);
+  color: inherit;
   display: inline-block;
   width: 1rem;
   height: 1rem;
@@ -409,6 +454,7 @@ dialog article form {
 .theme-switch-wrap:hover .theme-switch-icon::after {
   transform: rotate(180deg);
 }
+/* Tabs */
 .tabs header {
   padding-bottom: 0;
   border-bottom: 1px solid var(--muted-border-color);
@@ -419,6 +465,8 @@ dialog article form {
   gap: .5em;
   margin-bottom: 0;
   padding: 0;
+  margin-bottom: calc(var(--font-size) - 1.07em);
+  overflow: auto hidden;
 }
 .tabs.stretch header ul .tab-btn {
   flex: 1;
@@ -429,13 +477,14 @@ dialog article form {
   list-style-type: none;
   cursor: pointer;
   padding: 1em;
-  margin-bottom: calc(var(--font-size) - 1.07em);
   border-top-right-radius: var(--border-radius);
   border-top-left-radius: var(--border-radius);
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
   background: var(--secondary-focus);
+  color: var(--contrast);
   border: 1px solid var(--muted-border-color);
+  margin-bottom: 0;
 }
 .tabs header .tab-btn.active {
   background: var(--card-background-color);
@@ -451,7 +500,103 @@ dialog article form {
 .nav-bar .menu-btn:after {
   display: none;
 }
-
+/* Toaster */
+.toaster {
+  position: fixed;
+  max-width: 350px;
+  width: 100%;
+  max-height: 50dvh;
+  overflow: auto;
+}
+.toaster:not(:empty) {
+  padding: 1rem;
+}
+.toaster.bottom-right {
+  bottom: 0;
+  right: 0;
+}
+.toaster.bottom-center {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+}
+.toaster.bottom-left {
+  bottom: 0;
+  left: 0;
+}
+.toaster.top-right {
+  top: 0;
+  right: 0;
+}
+.toaster.top-center {
+  top: 0;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+}
+.toaster.top-left {
+  top: 0;
+  left: 0;
+}
+.toast {
+  display: flex;
+  position: relative;
+  opacity: 0;
+  transition: .2s;
+  padding: 10px;
+  border-radius: var(--border-radius);
+  background: var(--secondary);
+  color: var(--secondary-inverse);
+  margin: .25em;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--card-box-shadow);
+}
+.toast .close {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  background-image: var(--icon-close);
+  background-position: center center;
+  background-size: auto 1rem;
+  background-repeat: no-repeat;
+  transition: opacity var(--transition);
+  filter: brightness(0);
+  opacity: .35;
+  cursor: pointer;
+}
+.toast .close:hover {
+  opacity: .65;
+}
+.toast.show {
+  opacity: 1;
+}
+.toaster.bottom-center .toast {
+  top: 1rem;
+}
+.toaster.bottom-center .toast.show {
+  top: 0;
+}
+.toaster:where(.bottom-right,.top-right) .toast {
+  right: -1rem;
+}
+.toaster:where(.bottom-right,.top-right) .toast.show {
+  right: 0;
+}
+.toaster:where(.bottom-left,.top-left) .toast {
+  left: -1rem;
+}
+.toaster:where(.bottom-left,.top-left) .toast.show {
+  left: 0;
+}
+.toaster.top-center .toast {
+  top: -1rem;
+}
+.toaster.top-center .toast.show {
+  top: 0;
+}
+/* Small */
 @media(max-width:575px) {
   .nav-bar.sm .desktop-menu {
     display: none;
@@ -468,7 +613,7 @@ dialog article form {
     display: none;
   }
 }
-
+/* Medium */
 @media(max-width:767px) {
   .nav-bar.md .desktop-menu {
     display: none;
@@ -485,7 +630,7 @@ dialog article form {
     display: none;
   }
 }
-
+/* Large */
 @media(max-width:991px) {
   .nav-bar.lg .desktop-menu {
     display: none;
@@ -502,7 +647,7 @@ dialog article form {
     display: none;
   }
 }
-
+/* Extra Large */
 @media(max-width:1199px) {
   .nav-bar.xl .desktop-menu {
     display: none;
