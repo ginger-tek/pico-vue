@@ -83,6 +83,7 @@ export const SmartTable = {
     bordered: Boolean
   },
   template: `<figure :class="{bordered}">
+    {{ data }}
     <table :role="striped ? 'grid' : ''">
       <thead>
         <tr>
@@ -119,8 +120,8 @@ export const SmartTable = {
   </figure>`,
   setup(props) {
     const data = Vue.reactive({
-      sortBy: '',
-      sortDir: 1,
+      sortBy: null,
+      sortDir: 0,
       filterCols: {}
     })
 
@@ -146,20 +147,20 @@ export const SmartTable = {
     })
 
     function unSort() {
-      data.sortBy = ''
-      data.sortDir = 1
+      data.sortBy = null
+      data.sortDir = 0
     }
 
     function sortAsc(n) {
-      if (data.sortBy == n) return unSort()
-      data.sortBy = n
+      if (data.sortBy == n && data.sortDir == 1) return unSort()
       data.sortDir = 1
+      data.sortBy = n
     }
 
     function sortDesc(n) {
-      if (data.sortBy == n) return unSort()
-      data.sortBy = n
+      if (data.sortBy == n && data.sortDir == -1) return unSort()
       data.sortDir = -1
+      data.sortBy = n
     }
 
     Vue.watch(() => data.filterCols, (n, o) => {
@@ -380,6 +381,7 @@ table thead .sort:before {
   display: block;
   content: var(--icon-chevron);
   margin: 0;
+  opacity: .5;
 }
 
 table thead .sort.desc:before {
@@ -393,7 +395,7 @@ table thead .sort.asc:before {
 
 table thead .sort:hover:before,
 table thead .sort.active:before {
-  content: var(--icon-chevron);
+  opacity: 1;
 }
 
 figure:has(table).bordered {
