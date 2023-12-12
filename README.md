@@ -11,11 +11,11 @@ Pico-vue is intended to also be used by just linking the pico-vue.js file, or by
 
 You can then start importing components right in your Vue files:
 ```js
-import { Component } from 'https://cdn.jsdelivr.net/gh/ginger-tek/pico-vue/pico-vue.min.js'
+import { Component } from 'https://cdn.jsdelivr.net/gh/ginger-tek/pico-vue/pico-vue.js'
 
 // or
 
-import { Component } from './pico-vue.min.js'
+import { Component } from './pico-vue.js'
 ```
 ---
 ## Components
