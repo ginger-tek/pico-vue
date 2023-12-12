@@ -194,6 +194,49 @@ Alerts with no content are hidden by default, and will show when content is adde
 <alert type="error">Oh no! Something went wrong!</alert> <!-- shown -->
 ```
 ---
+## Toaster
+### Attributes
+|Name|Type|Details|
+|---|---|---|
+|`position`|String|Sets the position of the toaster on the page. Valid options are `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, or `bottom-right`. Defaults to `bottom-left`|
+|`width`|String|Sets the max width of the toaster and toasts. Defaults to `350px`|
+
+A responsive component for creating toast notifications.
+
+**NOTE: Only one instance of the toaster component should be added to your application, typically in the main `App` component.**
+
+To add a toast programmatically, use the global window function `appendToast` and pass an object with any of the following options:
+|Name|Type|Details|
+|---|---|---|
+|`content`|String|Text or HTML string of content to display|
+|`type`|String|Style of the toast. Valid options are `success` (green), `info` (cyan), `warning` (yellow), or `error` (red)|
+|`dismissAfter`|Number|Seconds after which the toast will auto-dismiss. Default is 5 seconds|
+|`stay`|Boolean|Disable the auto-dismiss. Toast must be closed manually|
+
+### Examples
+```html
+<toaster width="400px"></toaster>
+<toaster position="top-center"></toaster>
+```
+```js
+// regular (gray) toast
+appendToast({ content: 'Here is a message' })
+// info (cyan) toast
+appendToast({ content: 'Some info...', type: 'info' })
+// success (green) toast
+appendToast({ content: 'Success!', type: 'success' })
+// warning (yellow) toast that dismisses after 10 seconds
+appendToast({ content: 'Warning!', type: 'warning', dismissAfter: 10 })
+// error (red) toast that does not dismiss automatically
+appendToast({ content: 'An error has occurred!', type: 'error', stay: true })
+```
+
+### Examples
+```html
+<alert type="error"></alert> <!-- hidden -->
+<alert type="error">Oh no! Something went wrong!</alert> <!-- shown -->
+```
+---
 ## ThemeSwitch
 ### Attributes
 |Name|Type|Details|
