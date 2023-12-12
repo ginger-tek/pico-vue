@@ -16,7 +16,7 @@ export const Modal = {
   setup(_props, { emit }) {
     const modal = Vue.ref(null)
     const doc = document.documentElement
-    const duration = 400
+    const duration = 401
 
     function show(el) {
       doc.classList.add('modal-is-open', 'modal-is-opening')
