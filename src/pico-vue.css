@@ -151,7 +151,6 @@ dialog article form {
   background: linear-gradient(to right, currentColor 0, currentColor 50%, transparent 50%);
   content: '';
   transition: transform var(--transition);
-  vertitcal-align: middle;
 }
 
 .theme-switch-wrap:hover .theme-switch-icon::after {
