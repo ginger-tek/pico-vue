@@ -181,7 +181,7 @@ export const Toaster = {
   props: {
     width: {
       type: String,
-      default: '500px'
+      default: '350px'
     },
     position: {
       type: String,
@@ -191,7 +191,6 @@ export const Toaster = {
   template: `<div :class="['toaster',position]" ref="toaster" :style="{'max-width':width}"></div>`,
   setup() {
     const toaster = Vue.ref(null)
-    const duration = 5000
     const fade = 201
 
     Vue.onMounted(() => {
@@ -200,13 +199,13 @@ export const Toaster = {
         el?.classList.remove('show')
         setTimeout(() => el?.remove(), fade)
       }
-      window.appendToast = ({ content, stay = false, type = false }) => {
+      window.appendToast = ({ content, dismissAfter = 5, stay = false, type = false }) => {
         const toast = document.createElement('div')
         toast.classList.add('toast', type)
         toast.innerHTML = `<div>${content}</div><span class="close" onclick="closeToast(this.parentElement)"></span>`
         toaster.value.appendChild(toast)
         setTimeout(() => toast.classList.add('show'), 1)
-        if (!stay) setTimeout(() => closeToast(toast), duration)
+        if (!stay) setTimeout(() => closeToast(toast), dismissAfter * 1000)
       }
     })
 
