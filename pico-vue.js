@@ -60,7 +60,7 @@ export const Dropdown = {
   },
   inheritAttrs: false,
   template: `<details role="list" :dir="$attrs['dir']">
-    <summary aria-haspopup="listbox" :role="$attrs['role']" :class="$attrs['class']">{{ label }}</summary>
+    <summary aria-haspopup="listbox" :role="$attrs['role']" :class="$attrs['class']">{{ label || 'Select one...' }}</summary>
     <ul role="listbox" @click="select">
       <slot></slot>
     </ul>
@@ -82,7 +82,7 @@ export const SmartTable = {
     striped: Boolean,
     bordered: Boolean
   },
-  template: `<figure :class="{bordered}">
+  template: `<figure :class="['smart-table',{bordered}]">
     <table :role="striped ? 'grid' : ''">
       <thead>
         <tr>
@@ -246,7 +246,7 @@ export const ThemeSwitch = {
 
     Vue.watch(() => data.theme, toggle)
 
-    Vue.onMounted(load)
+    Vue.onBeforeMount(load)
 
     return { data, toggle }
   }
@@ -308,9 +308,7 @@ export const Tabs = {
         </li>
       </ul>
     </header>
-    <div class="tab-content-wrap">
-      <component :is="slots.default()[active]"></component>
-    </div>
+    <component :is="slots.default()[active]"></component>
   </article>`,
   setup() {
     const slots = Vue.useSlots()
@@ -322,10 +320,8 @@ export const Tabs = {
 const sheet = new CSSStyleSheet()
 sheet.replaceSync(`/* Global */
 :root {
-  --success: #3e7b40;
-  --info: #24c5c5;
-  --warning: #ffeb59;
-  --error: #d73737;
+  --success: var(--form-element-valid-border-color);
+  --error: var(--form-element-invalid-border-color);
 }
 
 .compact:where(input:not([type=checkbox], [type=radio], [type=range]), select, textarea, button, [role=button]) {
@@ -334,27 +330,64 @@ sheet.replaceSync(`/* Global */
 }
 
 .success {
-  --background-color: var(--success);
-}
-
-.info {
-  --background-color: var(--info);
-  --color: rgba(0, 0, 0, .75);
-}
-
-.warning {
-  --background-color: var(--warning);
-  --color: rgba(0, 0, 0, .75);
+  filter: hue-rotate(269deg) contrast(1.15);
 }
 
 .error {
-  --background-color: var(--error);
+  filter: hue-rotate(178deg) contrast(1.15);
 }
 
-label:has([required]:where(input:not([type=radio],[type=checkbox],[type=range])),select,textarea):before {
+label:has([required]:where(input:not([type=radio], [type=checkbox], [type=range])), select, textarea):before {
   display: inline-block;
   content: '*';
   color: var(--error);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+.row>* {
+  width: auto;
+  flex: 1;
+}
+
+/* Modal (Dialog) */
+dialog {
+  outline: none;
+}
+
+dialog.wide article {
+  max-width: 100%;
+}
+
+dialog article header .close {
+  cursor: pointer;
+}
+
+dialog article {
+  padding-bottom: 1rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+dialog article header {
+  margin-bottom: 1rem;
+}
+
+dialog article form {
+  margin-bottom: 0;
+}
+
+/* Dropdown */
+details[role=list] ul li {
+  cursor: pointer;
+}
+
+details[role=list] ul li:has(:not(a)):hover {
+  background-color: var(--dropdown-hover-background-color);
 }
 
 /* Smart Table */
@@ -405,52 +438,13 @@ table thead .sort.active:before {
   opacity: 1;
 }
 
-figure:has(table).bordered {
+figure.smart-table table {
+  margin-bottom: 0 !important;
+}
+
+figure.smart-table:has(table).bordered {
   border: 1px solid var(--table-border-color);
   border-radius: var(--border-radius);
-}
-
-figure.bordered table {
-  margin-bottom: 0;
-}
-
-/* Modal (Dialog) */
-dialog {
-  outline: none;
-}
-
-dialog.wide article {
-  max-width: 100%;
-}
-
-dialog article header .close {
-  cursor: pointer;
-}
-
-dialog article {
-  padding-bottom: 1rem;
-  width: 100%;
-  max-width: 400px;
-}
-
-dialog article header {
-  margin-bottom: 1rem;
-}
-
-dialog article form {
-  margin-bottom: 0;
-}
-
-/* Flex Row */
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .75rem;
-}
-
-.row>* {
-  width: auto;
-  flex: 1;
 }
 
 /* Alert */
@@ -541,10 +535,7 @@ dialog article form {
   border-bottom-color: var(--card-background-color);
 }
 
-.tabs .tab-content-wrap {
-  overflow: auto;
-}
-
+/* NavBar */
 .nav-bar .menu-btn {
   align-items: center;
   padding: .65rem;
