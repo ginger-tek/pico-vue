@@ -104,14 +104,14 @@ export const SmartTable = {
             <slot :name="col.name.toLowerCase()" :="row">{{ row[col.name] }}</slot>
           </td>
         </tr>
-        <tr v-if="rows.length == 0">
-          <td :colspan="columns.length" style="text-align:center">
-            <slot name="emptyFilterText">No items by that filter</slot>
-          </td>
-        </tr>
-        <tr v-else-if="items.length == 0">
+        <tr v-if="items.length == 0">
           <td :colspan="columns.length" style="text-align:center">
             <slot name="emptyText">No data</slot>
+          </td>
+        </tr>
+        <tr v-else-if="rows.length == 0">
+          <td :colspan="columns.length" style="text-align:center">
+            <slot name="emptyFilterText">No items by that filter</slot>
           </td>
         </tr>
       </tbody>
