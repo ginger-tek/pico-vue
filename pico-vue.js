@@ -101,7 +101,7 @@ export const SmartTable = {
       <tbody>
         <tr v-for="(row,rx) in rows" :key="'r'+rx">
           <td v-for="col in columns" :key="col.name" :style="{ 'text-align': col.align || 'inherit' }">
-            <slot :name="col.name.toLowerCase()" :="row">{{ row[col.name] }}</slot>
+            <slot :name="col.name" :="row">{{ row[col.name] }}</slot>
           </td>
         </tr>
         <tr v-if="items.length == 0">
@@ -127,7 +127,7 @@ export const SmartTable = {
     const columns = Vue.computed(() => {
       return (props.fields || Object.keys(props?.items[0] || {})).map(c => ({
         name: c.name || c,
-        label: c.label || (c.name || c).split(/_|-|(?=A-Z])/).map(w => w[0].toUpperCase() + w.substring(1)).join(' '),
+        label: c.label || (c.name || c).split(/_|-|(?=[A-Z])/).map(w => w[0].toUpperCase() + w.substring(1)).join(' '),
         align: c.align || false
       }))
     })
