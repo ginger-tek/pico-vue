@@ -329,12 +329,20 @@ sheet.replaceSync(`/* Global */
   height: calc(0.5rem * var(--line-height) + var(--form-element-spacing-vertical) * 1.75 + var(--border-width) * 1.75) !important;
 }
 
-.success {
+:where(button,[role=button]).success {
   filter: hue-rotate(269deg) contrast(1.15);
 }
 
-.error {
+.success {
+  background: var(--ins-color) !important;
+}
+
+:where(button,[role=button]).error {
   filter: hue-rotate(178deg) contrast(1.15);
+}
+
+.error {
+  background: var(--del-color) !important;
 }
 
 label:has([required]:where(input:not([type=radio], [type=checkbox], [type=range])), select, textarea):before {
