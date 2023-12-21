@@ -290,7 +290,7 @@ export const NavBar = {
     
     Vue.onMounted(() => {
       menu.value.querySelectorAll('ul li a').forEach(el => {
-        el.addEventListener('click', () => menu.value.removeAttribute('open')
+        el.addEventListener('click', () => menu.value.removeAttribute('open'))
       })
     })
     
