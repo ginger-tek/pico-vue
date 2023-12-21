@@ -278,7 +278,7 @@ export const NavBar = {
           <summary aria-haspopup="listbox" role="link" class="menu-btn">
             <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="1.2rem" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
           </summary>
-          <ul role="listbox" dir="ltr" @click="closeMenu">
+          <ul role="listbox" dir="ltr">
             <slot name="menu"></slot>
           </ul>
         </details>
@@ -288,11 +288,13 @@ export const NavBar = {
   setup() {
     const menu = Vue.ref(null)
     
-    function closeMenu() {
-      menu.value.removeAttribute('open')
-    }
+    Vue.onMounted(() => {
+      menu.value.querySelectorAll('ul li a').forEach(el => {
+        el.addEventListener('click', () => menu.value.removeAttribute('open')
+      })
+    })
     
-    return { menu, closeMenu }
+    return { menu }
   }
 }
 
