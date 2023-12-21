@@ -36,7 +36,7 @@ export const Modal = {
     Vue.onMounted(() => {
       const cancel = (ev) => {
         ev.preventDefault()
-        close(ev.target)
+        close(modal.value)
       }
       // for some reason, the dialog cancel event doesn't fire all the time when it should
       // so adding a keydown listener for the 'Escape' key as a fallback
