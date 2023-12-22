@@ -38,7 +38,12 @@ export const Modal = {
       if (!window.closeModal)
         window.closeModal = (id) => close(document.getElementById(id))
       document.querySelectorAll(`[data-show-modal=${modal.value.id}]`).forEach(el => el.addEventListener('click', () => show(modal.value)))
-      modal.value.querySelectorAll(`[data-close-modal]`).forEach(el => el.addEventListener('click', () => close(modal.value)))
+      modal.value.querySelectorAll(`[data-close-modal]`).forEach(el => {
+        if (el.onclick) return
+        let parentDialog = el.parentElement
+        while (parentDialog != modal.value) parentDialog = parentDialog.parentElement
+        el.onclick = () => close(parentDialog)
+      })
     })
 
     return { modal, close }
