@@ -136,7 +136,7 @@ export const SmartTable = {
       if (!props.items || !Array.isArray(props.items)) return []
       const filters = Object.keys(data.filterCols)
       const results = props.filter && filters.length > 0
-        ? props.items.filter(i => filters.map(f => i[f].toLowerCase().indexOf(data.filterCols[f]) > -1).every(b => b == true))
+        ? props.items.filter(i => filters.map(f => i[f].toString().toLowerCase().indexOf(data.filterCols[f]) > -1).every(b => b == true))
         : props.items
       return results.toSorted((a, b) => {
         if (a[data.sortBy] > b[data.sortBy]) return 1 * data.sortDir
