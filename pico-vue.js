@@ -18,12 +18,12 @@ export const Modal = {
     const doc = document.documentElement
 
     function show(el) {
-      doc.classList.add('modal-is-open')
+      //doc.classList.add('modal-is-open')
       el.showModal()
     }
 
     function close(el) {
-      doc.classList.remove('modal-is-open')
+      //doc.classList.remove('modal-is-open')
       el.close()
       Vue.nextTick(() => emit('closed'))
     }
