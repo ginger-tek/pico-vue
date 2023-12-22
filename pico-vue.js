@@ -361,9 +361,23 @@ label:has([required]:where(input:not([type=radio], [type=checkbox], [type=range]
 }
 
 /* Modal (Dialog) */
-
 dialog {
   outline: none;
+}
+
+dialog,
+dialog > article {
+  position: relative;
+  animation: fade-out 0.2s ease-out;
+}
+
+dialog[open],
+dialog[open] > article {
+  animation: fade-in 0.2s ease-in;
+}
+
+dialog[open]::backdrop {
+  animation: backdrop-fade-in 0.2s ease-in forwards;
 }
 
 dialog.wide article {
@@ -386,6 +400,44 @@ dialog article header {
 
 dialog article form {
   margin-bottom: 0;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    top: -1rem;
+    display: none;
+  }
+
+  100% {
+    opacity: 1;
+    top: 0;
+    display: grid;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+    top: 0;
+    display: grid;
+  }
+
+  100% {
+    opacity: 0;
+    top: -1rem;
+    display: none;
+  }
+}
+
+@keyframes backdrop-fade-in {
+  0% {
+    background-color: rgb(0 0 0 / 0);
+  }
+
+  100% {
+    background-color: rgb(0 0 0 / 0.25);
+  }
 }
 
 /* Dropdown */
