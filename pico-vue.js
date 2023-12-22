@@ -31,7 +31,7 @@ export const Modal = {
     Vue.onMounted(() => {
       modal.value.addEventListener('close', () => {
         doc.classList.remove('modal-is-open')
-        Vue.nextTick(() => emit('closed')))
+        Vue.nextTick(() => emit('closed'))
       })
       if (!window.showModal)
         window.showModal = (id) => show(document.getElementById(id))
