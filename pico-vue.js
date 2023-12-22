@@ -18,17 +18,21 @@ export const Modal = {
     const doc = document.documentElement
 
     function show(el) {
-      //doc.classList.add('modal-is-open')
+      doc.classList.add('modal-is-open')
       el.showModal()
     }
 
     function close(el) {
-      //doc.classList.remove('modal-is-open')
       el.close()
+      doc.classList.remove('modal-is-open')
       Vue.nextTick(() => emit('closed'))
     }
 
     Vue.onMounted(() => {
+      modal.value.addEventListener('close', () => {
+        doc.classList.remove('modal-is-open')
+        Vue.nextTick(() => emit('closed')))
+      })
       if (!window.showModal)
         window.showModal = (id) => show(document.getElementById(id))
       if (!window.closeModal)
