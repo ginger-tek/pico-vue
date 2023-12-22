@@ -371,7 +371,6 @@ dialog {
 
 dialog,
 dialog > article {
-  position: relative;
   animation: fade-out 0.2s ease-out;
 }
 
@@ -384,25 +383,26 @@ dialog[open]::backdrop {
   animation: backdrop-fade-in 0.2s ease-in forwards;
 }
 
-dialog.wide article {
+dialog.wide > article {
   max-width: 100%;
 }
 
-dialog article header .close {
+dialog > article header .close {
   cursor: pointer;
 }
 
-dialog article {
+dialog > article {
   padding-bottom: 1rem;
   width: 100%;
   max-width: 400px;
+  position: relative;
 }
 
-dialog article header {
+dialog > article header {
   margin-bottom: 1rem;
 }
 
-dialog article form {
+dialog > article form {
   margin-bottom: 0;
 }
 
