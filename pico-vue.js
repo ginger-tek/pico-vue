@@ -16,32 +16,19 @@ export const Modal = {
   setup(_props, { emit }) {
     const modal = Vue.ref(null)
     const doc = document.documentElement
-    const duration = 400
 
     function show(el) {
-      doc.classList.add('modal-is-open', 'modal-is-opening')
+      doc.classList.add('modal-is-open')
       el.showModal()
-      setTimeout(() => doc.classList.remove('modal-is-opening'), duration)
     }
 
     function close(el) {
-      doc.classList.add('modal-is-closing')
-      setTimeout(() => {
-        doc.classList.remove('modal-is-closing', 'modal-is-open')
-        el?.close()
-        Vue.nextTick(() => emit('closed'))
-      }, duration)
+      doc.classList.remove('modal-is-open')
+      el.close()
+      Vue.nextTick(() => emit('closed'))
     }
 
     Vue.onMounted(() => {
-      const cancel = (ev) => {
-        ev.preventDefault()
-        close(modal.value)
-      }
-      // for some reason, the dialog cancel event doesn't fire all the time when it should
-      // so adding a keydown listener for the 'Escape' key as a fallback
-      modal.value.addEventListener('keydown', (e) => { if (e.key == 'Escape') cancel(e) })
-      modal.value.addEventListener('cancel', cancel)
       if (!window.showModal)
         window.showModal = (id) => show(document.getElementById(id))
       if (!window.closeModal)
@@ -374,6 +361,7 @@ label:has([required]:where(input:not([type=radio], [type=checkbox], [type=range]
 }
 
 /* Modal (Dialog) */
+
 dialog {
   outline: none;
 }
