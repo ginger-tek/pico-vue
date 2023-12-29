@@ -97,17 +97,17 @@ export const SmartTable = {
       <tbody>
         <tr v-for="(row,rx) in rows" :key="'r'+rx">
           <td v-for="col in columns" :key="col.name" :style="{ 'text-align': col.align || 'inherit' }">
-            <slot :name="col.name" :="row">{{ row[col.name] }}</slot>
+            <slot :name="convert(col.name)" :="row">{{ row[col.name] }}</slot>
           </td>
         </tr>
         <tr v-if="items.length == 0">
           <td :colspan="columns.length" style="text-align:center">
-            <slot name="emptyText">No data</slot>
+            <slot name="empty-text">No data</slot>
           </td>
         </tr>
         <tr v-else-if="rows.length == 0">
           <td :colspan="columns.length" style="text-align:center">
-            <slot name="emptyFilterText">No items by that filter</slot>
+            <slot name="empty-filter-text">No items by that filter</slot>
           </td>
         </tr>
       </tbody>
@@ -158,13 +158,17 @@ export const SmartTable = {
       data.sortBy = n
     }
 
+    function convert(n) {
+      return n.split(/_|-|(?=[A-Z])/).map(w => w.toLowerCase()).join('-')
+    }
+
     Vue.watch(() => data.filterCols, (n, o) => {
       Object.keys(n).forEach(k => {
         if (data.filterCols[k] == '') delete data.filterCols[k]
       })
     }, { deep: true })
 
-    return { data, rows, columns, sortAsc, sortDesc }
+    return { data, rows, columns, sortAsc, sortDesc, convert }
   }
 }
 
@@ -321,6 +325,20 @@ export const Tabs = {
     const slots = Vue.useSlots()
     const active = Vue.ref(0)
     return { active, slots }
+  }
+}
+
+export default {
+  install(app, _options) {
+    app.component('modal', Modal)
+    app.component('dropdown', Dropdown)
+    app.component('smart-table', SmartTable)
+    app.component('alert', Alert)
+    app.component('toaster', Toaster)
+    app.component('theme-switch', ThemeSwitch)
+    app.component('nav-bar', NavBar)
+    app.component('tab', Tab)
+    app.component('tabs', Tabs)
   }
 }
 
