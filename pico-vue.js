@@ -399,7 +399,7 @@ dialog > article {
 
 dialog[open],
 dialog[open] > article {
-  animation: fade-in 0.2s ease-in;
+  animation: fade-in 0.2s ease-out;
 }
 
 dialog[open]::backdrop {
