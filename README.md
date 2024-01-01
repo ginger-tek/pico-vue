@@ -3,45 +3,31 @@
 **A [Vue 3](https://vuejs.org) component library for use with the [Pico CSS](https://picocss.com/) framework**
 
 ---
-
 ## Get Started
 It is recommended to already be familiar with Pico CSS, as the components utilize the same semantic HTML, attributes, and classes. You can review the docs [here](https://picocss.com/docs) if necessary.
 
-Pico-vue is intended to also be used by just linking the pico-vue.js file, or by downloading into your project files.
+### Install
+Currently, PicoVue is only accessible through CDN or manually copying it to your project files (npm coming soon!).
 
-You can then start importing components right in your Vue files:
+You can load all components globally (recommended):
 ```js
-import { Component } from 'https://cdn.jsdelivr.net/gh/ginger-tek/pico-vue@latest/pico-vue.js'
+import PicoVue from 'https://cdn.jsdelivr.net/gh/ginger-tek/pico-vue@latest/pico-vue.js'
 
-// or
-
-import { Component } from './pico-vue.js'
+createApp(App)
+  .use(PicoVue)
+  .mount('#app')
 ```
+
+Or you can import individual components as needed:
+```js
+import { SmartTable } from 'https://cdn.jsdelivr.net/gh/ginger-tek/pico-vue@latest/pico-vue.js'
+```
+
 ---
-## Components
-All components are vanilla ESM modules that use the Vue 3 Composition API.
+# Components
 
-They can be used directly in both vanilla ESM modules:
-```js
-import { Modal } from 'pico-vue.js"
+All components are vanilla ESM modules that use the Vue 3 Composition API. They can be used directly in both vanilla ESM modules or Vue Single File Components (SFC)
 
-export default {
-  template: `<modal></modal>`
-  setup() {
-    ...
-  }
-}
-```
-or Vue Single File Components (SFC):
-```vue
-<script setup>
-import { Modal } from 'pico-vue.js'
-</script>
-
-<template>
-  <Modal/>
-</template>
-```
 ---
 ## Modal
 ### Attributes
