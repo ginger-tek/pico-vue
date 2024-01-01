@@ -3,25 +3,56 @@
 **A [Vue 3](https://vuejs.org) component library for use with the [Pico CSS](https://picocss.com/) framework**
 
 ---
-## Get Started
+# Get Started
 It is recommended to already be familiar with Pico CSS, as the components utilize the same semantic HTML, attributes, and classes. You can review the docs [here](https://picocss.com/docs) if necessary.
 
-### Install
-Currently, PicoVue is only accessible through CDN or manually copying it to your project files (npm coming soon!).
+## How To Use
+Which build of Vue you are using will determine how PicoVue needs to be installed and integrated.
 
-You can load all components globally (recommended):
-```js
-import PicoVue from 'https://cdn.jsdelivr.net/gh/ginger-tek/pico-vue@latest/pico-vue.js'
+### ES Module Build (CDN)
+This is the suggested way to implement PicoVue, in the spirit of building web apps the "no-tools" way ;)
 
-createApp(App)
-  .use(PicoVue)
-  .mount('#app')
-```
+1. First, add Pico and Vue via CDN:
+    ```html
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico">
+    <script src="https://unpkg.com/vue@3"></script>
+    ```
+2. Then, import PicoVue in your module file:
+    ```js
+    import PicoVue from 'https://unpkg.com/@ginger-tek/pico-vue@latest/pico-vue.js'
+    ```
+3. Finally, load PicoVue into your app via `use()`:
+    ```js
+    Vue.createApp(App)
+      .use(PicoVue)
+      .mount('#app')
+    ```
 
-Or you can import individual components as needed:
-```js
-import { SmartTable } from 'https://cdn.jsdelivr.net/gh/ginger-tek/pico-vue@latest/pico-vue.js'
-```
+### Vue Compiled SFC
+If you're building your Vue app via Vite or similar build-tools, you can still use PicoVue; just requires a few more steps
+
+1. First, install PicoCSS and PicoVue from p/npm:
+    ```
+    npm install @picocss/pico @ginger-tek/pico-vue
+    ```
+2. Then, import PicoCSS and your App component:
+    ```js
+    import '@picocss/pico'
+    import App from './App.vue'
+    ```
+4. To properly initialize PicoVue, we need to import the ESM Bundler version of Vue and make it global to simulate the ESM Module build of Vue:
+    ```js
+    import * as Vue from 'vue/dist/vue.esm-bundler'
+    window.Vue = Vue
+    ```
+5. Finally, import PicoVue and `use()` it in your app:
+    ```js
+    import PicoVue from '@ginger-tek/pico-vue'
+    
+    createApp(App)
+      .use(PicoVue)
+      .mount('#app')
+    ```
 
 ---
 # Components
