@@ -1,0 +1,28 @@
+{
+  "name": "@ginger-tek/pico-vue",
+  "version": "1.2.2",
+  "description": "Vue component library to use with Pico CSS",
+  "main": "pico-vue.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ginger-tek/pico-vue.git"
+  },
+  "keywords": [
+    "javascript",
+    "ui",
+    "pico",
+    "picocss",
+    "@picocss/pico",
+    "component",
+    "library"
+  ],
+  "author": "GingerTek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ginger-tek/pico-vue/issues"
+  },
+  "homepage": "https://github.com/ginger-tek/pico-vue#readme"
+}
