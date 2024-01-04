@@ -1,6 +1,6 @@
 {
   "name": "@ginger-tek/pico-vue",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Vue component library to use with Pico CSS",
   "main": "pico-vue.js",
   "scripts": {
