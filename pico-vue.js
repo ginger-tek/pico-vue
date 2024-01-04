@@ -216,7 +216,7 @@ export const Toaster = {
         toast.classList.add('toast', type)
         toast.innerHTML = `<div>${content}</div><span class="close" onclick="closeToast(this.parentElement)"></span>`
         toaster.value.appendChild(toast)
-        setTimeout(() => toast.classList.add('show'), 1)
+        Vue.nextTick(() => toast.classList.add('show'))
         if (!stay) setTimeout(() => closeToast(toast), dismissAfter * 1000)
       }
     })
@@ -557,6 +557,124 @@ figure.smart-table:has(table).bordered {
   color: rgba(255, 255, 255, .9);
 }
 
+/* Toaster */
+.toaster {
+  position: fixed;
+  max-width: 350px;
+  width: 100%;
+  max-height: 50dvh;
+  overflow: auto;
+}
+
+.toaster:not(:empty) {
+  padding: 1rem;
+}
+
+.toaster.bottom-right {
+  bottom: 0;
+  right: 0;
+}
+
+.toaster.bottom-center {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+}
+
+.toaster.bottom-left {
+  bottom: 0;
+  left: 0;
+}
+
+.toaster.top-right {
+  top: 0;
+  right: 0;
+}
+
+.toaster.top-center {
+  top: 0;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+}
+
+.toaster.top-left {
+  top: 0;
+  left: 0;
+}
+
+.toast {
+  display: flex;
+  position: relative;
+  opacity: 0;
+  transition: .2s;
+  padding: 10px;
+  border-radius: var(--border-radius);
+  background: var(--secondary);
+  color: var(--secondary-inverse);
+  margin: 10px;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--card-box-shadow);
+  max-width: 500px;
+  width: 100%;
+}
+
+.toast .close {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  background-image: var(--icon-close);
+  background-position: center center;
+  background-size: auto 1rem;
+  background-repeat: no-repeat;
+  transition: opacity var(--transition);
+  filter: brightness(0);
+  opacity: .35;
+  cursor: pointer;
+}
+
+.toast .close:hover {
+  opacity: .65;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+.toaster.bottom-center .toast {
+  top: 1rem;
+}
+
+.toaster.bottom-center .toast.show {
+  top: 0;
+}
+
+.toaster:where(.bottom-right, .top-right) .toast {
+  right: -1rem;
+}
+
+.toaster:where(.bottom-right, .top-right) .toast.show {
+  right: 0;
+}
+
+.toaster:where(.bottom-left, .top-left) .toast {
+  left: -1rem;
+}
+
+.toaster:where(.bottom-left, .top-left) .toast.show {
+  left: 0;
+}
+
+.toaster.top-center .toast {
+  top: -1rem;
+}
+
+.toaster.top-center .toast.show {
+  top: 0;
+}
+
 /* Theme Switch */
 .theme-switch-wrap {
   display: inline-block;
@@ -637,122 +755,6 @@ figure.smart-table:has(table).bordered {
 
 .nav-bar .menu-btn:after {
   display: none;
-}
-
-/* Toaster */
-.toaster {
-  position: fixed;
-  max-width: 350px;
-  width: 100%;
-  max-height: 50dvh;
-  overflow: auto;
-}
-
-.toaster:not(:empty) {
-  padding: 1rem;
-}
-
-.toaster.bottom-right {
-  bottom: 0;
-  right: 0;
-}
-
-.toaster.bottom-center {
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin-inline: auto;
-}
-
-.toaster.bottom-left {
-  bottom: 0;
-  left: 0;
-}
-
-.toaster.top-right {
-  top: 0;
-  right: 0;
-}
-
-.toaster.top-center {
-  top: 0;
-  left: 0;
-  right: 0;
-  margin-inline: auto;
-}
-
-.toaster.top-left {
-  top: 0;
-  left: 0;
-}
-
-.toast {
-  display: flex;
-  position: relative;
-  opacity: 0;
-  transition: .2s;
-  padding: 10px;
-  border-radius: var(--border-radius);
-  background: var(--secondary);
-  color: var(--secondary-inverse);
-  margin: .25em;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: var(--card-box-shadow);
-}
-
-.toast .close {
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  background-image: var(--icon-close);
-  background-position: center center;
-  background-size: auto 1rem;
-  background-repeat: no-repeat;
-  transition: opacity var(--transition);
-  filter: brightness(0);
-  opacity: .35;
-  cursor: pointer;
-}
-
-.toast .close:hover {
-  opacity: .65;
-}
-
-.toast.show {
-  opacity: 1;
-}
-
-.toaster.bottom-center .toast {
-  top: 1rem;
-}
-
-.toaster.bottom-center .toast.show {
-  top: 0;
-}
-
-.toaster:where(.bottom-right, .top-right) .toast {
-  right: -1rem;
-}
-
-.toaster:where(.bottom-right, .top-right) .toast.show {
-  right: 0;
-}
-
-.toaster:where(.bottom-left, .top-left) .toast {
-  left: -1rem;
-}
-
-.toaster:where(.bottom-left, .top-left) .toast.show {
-  left: 0;
-}
-
-.toaster.top-center .toast {
-  top: -1rem;
-}
-
-.toaster.top-center .toast.show {
-  top: 0;
 }
 
 /* Small */
