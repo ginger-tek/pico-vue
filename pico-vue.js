@@ -76,7 +76,8 @@ export const SmartTable = {
     fields: Array,
     filter: Boolean,
     striped: Boolean,
-    bordered: Boolean
+    bordered: Boolean,
+    busy: Boolean
   },
   template: `<figure :class="['smart-table',{bordered}]">
     <table :role="striped ? 'grid' : ''">
@@ -94,7 +95,14 @@ export const SmartTable = {
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="busy">
+        <tr>
+          <td :colspan="columns.length">
+            <div aria-busy="true"><slot name="busy-text"></slot></div>
+          </td>
+        </tr>
+      </tbody>
+      <tbody v-else>
         <tr v-for="(row,rx) in rows" :key="'r'+rx">
           <td v-for="col in columns" :key="col.name" :style="{ 'text-align': col.align || 'inherit' }">
             <slot :name="convert(col.name)" :="row">{{ row[col.name] }}</slot>
