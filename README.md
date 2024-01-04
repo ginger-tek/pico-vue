@@ -150,18 +150,19 @@ async function refreshData() {
 |`filter`|Boolean|Shows type-to-search column filters in the table header|
 |`striped`|Boolean|Adds a striped styling to the table rows|
 |`bordered`|Boolean|Adds an outside border styling to the table wrapper|
+|`busy`|Boolean|Hides the table body rows and shows a spinner|
 
-Provides an interactive, responsive table with filtering and sorting.
+Provides an interactive, responsive table with column filtering and sorting.
 
-Columns are automatically generated based on the object properties in the array, but you can use the `fields` attribute to only show the columns specified.
+Columns are automatically generated based on the object properties in the array, but you can use the `fields` attribute to specify columns.
 
 ### Examples
 *Simple*
 ```html
-<smart-table :items="data"></smart-table>
+<smart-table :items="data" bordered></smart-table>
 ```
 
-*Specific Fields*
+*Specific Columns*
 ```html
 <smart-table :items="data" :fields="fields"></smart-table>
 ```
@@ -182,7 +183,7 @@ const fields = [
 *Custom Empty Text/HTML*
 ```html
 <smart-table :items="data">
-  <template #emptyText>
+  <template #empty-text>
     <span style="color:red">No data at all, muchacho!</span>
   </template>
 </smart-table>
@@ -191,8 +192,17 @@ const fields = [
 *Custom Empty Filter Text/HTML*
 ```html
 <smart-table :items="data" filter>
-  <template #emptyFilterText>
+  <template #empty-filter-text>
     <i>No result for that. Try again, buddy<i>
+  </template>
+</smart-table>
+```
+
+*Custom Busy Text/HTML*
+```html
+<smart-table :items="data" :busy="true">
+  <template #busy-text>
+    <span style="color:red">Hold up! We're working on it!</span>
   </template>
 </smart-table>
 ```
