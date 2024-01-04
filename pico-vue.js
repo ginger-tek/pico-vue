@@ -213,10 +213,11 @@ export const Toaster = {
       }
       window.appendToast = ({ content, dismissAfter = 5, stay = false, type = false }) => {
         const toast = document.createElement('div')
-        toast.classList.add('toast', type)
+        toast.classList.add('toast')
+        if (type) toast.classList.add(type)
         toast.innerHTML = `<div>${content}</div><span class="close" onclick="closeToast(this.parentElement)"></span>`
         toaster.value.appendChild(toast)
-        Vue.nextTick(() => toast.classList.add('show'))
+        Vue.nextTick(() => setTimeout(() => toast.classList.add('show'), 100))
         if (!stay) setTimeout(() => closeToast(toast), dismissAfter * 1000)
       }
     })
@@ -564,6 +565,9 @@ figure.smart-table:has(table).bordered {
   width: 100%;
   max-height: 50dvh;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .toaster:not(:empty) {
@@ -606,6 +610,7 @@ figure.smart-table:has(table).bordered {
 
 .toast {
   display: flex;
+  gap: .25rem;
   position: relative;
   opacity: 0;
   transition: .2s;
@@ -613,7 +618,6 @@ figure.smart-table:has(table).bordered {
   border-radius: var(--border-radius);
   background: var(--secondary);
   color: var(--secondary-inverse);
-  margin: 10px;
   align-items: center;
   justify-content: space-between;
   box-shadow: var(--card-box-shadow);
@@ -621,8 +625,13 @@ figure.smart-table:has(table).bordered {
   width: 100%;
 }
 
+.toast.show {
+  opacity: 1;
+}
+
 .toast .close {
   display: inline-block;
+  flex-shrink: 0;
   width: 1rem;
   height: 1rem;
   background-image: var(--icon-close);
@@ -637,10 +646,6 @@ figure.smart-table:has(table).bordered {
 
 .toast .close:hover {
   opacity: .65;
-}
-
-.toast.show {
-  opacity: 1;
 }
 
 .toaster.bottom-center .toast {
