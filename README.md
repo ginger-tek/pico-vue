@@ -236,7 +236,7 @@ To add a toast programmatically, use the global window function `appendToast` an
 |Name|Type|Details|
 |---|---|---|
 |`content`|String|Text or HTML string of content to display|
-|`type`|String|Style of the toast. Valid options are `success` (green), `info` (cyan), `warning` (yellow), or `error` (red)|
+|`type`|String|Style of the toast. Valid options are `success` (green) or `error` (red)|
 |`dismissAfter`|Number|Seconds after which the toast will auto-dismiss. Default is 5 seconds|
 |`stay`|Boolean|Disable the auto-dismiss. Toast must be closed manually|
 
