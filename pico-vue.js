@@ -140,7 +140,7 @@ export const SmartTable = {
       if (!props.items || !Array.isArray(props.items)) return []
       const filters = Object.keys(data.filterCols)
       const results = props.filter && filters.length > 0
-        ? props.items.filter(i => filters.map(f => i[f]?.toString()?.toLowerCase().indexOf(data.filterCols[f]) > -1).every(b => b == true))
+        ? props.items.filter(i => filters.map(f => i[f]?.toString()?.toLowerCase().indexOf(data.filterCols[f].toLowerCase()) > -1).every(b => b == true))
         : props.items
       return results.toSorted((a, b) => {
         if (a[data.sortBy] > b[data.sortBy]) return 1 * data.sortDir
@@ -356,6 +356,8 @@ sheet.replaceSync(`/* Global */
 :root {
   --success: var(--form-element-valid-border-color);
   --error: var(--form-element-invalid-border-color);
+  --modal-duration: .2s;
+  --toast-duration: .2s;
 }
 
 .compact:where(input:not([type=checkbox], [type=radio], [type=range]), select, textarea, button, [role=button]) {
@@ -363,23 +365,15 @@ sheet.replaceSync(`/* Global */
   height: calc(0.5rem * var(--line-height) + var(--form-element-spacing-vertical) * 1.75 + var(--border-width) * 1.75) !important;
 }
 
-:where(button,[role=button]).success {
-  filter: hue-rotate(269deg) contrast(1.15);
-}
-
 .success {
   background: var(--ins-color) !important;
-}
-
-:where(button,[role=button]).error {
-  filter: hue-rotate(178deg) contrast(1.15);
 }
 
 .error {
   background: var(--del-color) !important;
 }
 
-label:has([required]:where(input:not([type=radio], [type=checkbox], [type=range])), select, textarea):before {
+label:has([required]):before {
   display: inline-block;
   content: '*';
   color: var(--error);
@@ -401,22 +395,24 @@ dialog {
   outline: none;
 }
 
-dialog,
-dialog > article {
-  animation: fade-out 0.2s ease-out;
+dialog {
+  animation: fade-out-dialog var(--modal-duration) ease-out;
 }
 
-dialog[open],
+dialog > article {
+  animation: fade-out-article var(--modal-duration) ease-out;
+}
+
+dialog[open] {
+  animation: fade-in-dialog var(--modal-duration) ease-out;
+}
+
 dialog[open] > article {
-  animation: fade-in 0.2s ease-out;
+  animation: fade-in-article var(--modal-duration) ease-out;
 }
 
 dialog[open]::backdrop {
-  animation: backdrop-fade-in 0.2s ease-in forwards;
-}
-
-dialog.wide > article {
-  max-width: 100%;
+  animation: backdrop-fade-in var(--modal-duration) ease-in forwards;
 }
 
 dialog > article header .close {
@@ -425,9 +421,8 @@ dialog > article header .close {
 
 dialog > article {
   padding-bottom: 1rem;
-  width: 100%;
-  max-width: 400px;
   position: relative;
+  width: 100%;
 }
 
 dialog > article header {
@@ -438,7 +433,7 @@ dialog > article form {
   margin-bottom: 0;
 }
 
-@keyframes fade-in {
+@keyframes fade-in-dialog {
   0% {
     opacity: 0;
     top: -1rem;
@@ -448,15 +443,43 @@ dialog > article form {
   100% {
     opacity: 1;
     top: 0;
-    display: grid;
+    display: flex;
   }
 }
 
-@keyframes fade-out {
+@keyframes fade-in-article {
+  0% {
+    opacity: 0;
+    top: -1rem;
+    display: none;
+  }
+
+  100% {
+    opacity: 1;
+    top: 0;
+    display: block;
+  }
+}
+
+@keyframes fade-out-dialog {
   0% {
     opacity: 1;
     top: 0;
-    display: grid;
+    display: flex;
+  }
+
+  100% {
+    opacity: 0;
+    top: -1rem;
+    display: none;
+  }
+}
+
+@keyframes fade-out-article {
+  0% {
+    opacity: 1;
+    top: 0;
+    display: block;
   }
 
   100% {
@@ -568,6 +591,7 @@ figure.smart-table:has(table).bordered {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  z-index: 10000;
 }
 
 .toaster:not(:empty) {
@@ -613,7 +637,7 @@ figure.smart-table:has(table).bordered {
   gap: .25rem;
   position: relative;
   opacity: 0;
-  transition: .2s;
+  transition: var(--toast-duration);
   padding: 10px;
   border-radius: var(--border-radius);
   background: var(--secondary);
