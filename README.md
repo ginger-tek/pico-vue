@@ -1,4 +1,4 @@
-<h1><img src="https://raw.githubusercontent.com/picocss/pico/master/.github/logo.svg" width="40px">&nbsp;<sup>&plus;</sup>&nbsp;<img src="https://vuejs.org/images/logo.png" width="40px"><br>pico-vue</h1>
+<h1><img src="https://picocss.com/build/_assets/pico-logo-dark-E4VKKVAT.png" width="90px">&nbsp;<sup>&plus;</sup>&nbsp;<img src="https://vuejs.org/images/logo.png" width="40px"><br>pico-vue</h1>
 
 **A [Vue 3](https://vuejs.org) component library for use with the [Pico CSS](https://picocss.com/) framework**
 
