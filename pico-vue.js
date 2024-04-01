@@ -55,7 +55,7 @@ export const Dropdown = {
     label: String
   },
   inheritAttrs: false,
-  template: `<details role="list" :dir="$attrs['dir']">
+  template: `<details class="dropdown" :dir="$attrs['dir']">
     <summary aria-haspopup="listbox" :role="$attrs['role']" :class="$attrs['class']">{{ label || 'Select one...' }}</summary>
     <ul role="listbox" @click="select">
       <slot></slot>
@@ -79,7 +79,7 @@ export const SmartTable = {
     bordered: Boolean,
     busy: Boolean
   },
-  template: `<figure :class="['smart-table',{bordered}]">
+  template: `<div :class="['overflow-auto smart-table',{bordered}]">
     <table :role="striped ? 'grid' : ''">
       <thead>
         <tr>
@@ -120,7 +120,7 @@ export const SmartTable = {
         </tr>
       </tbody>
     </table>
-  </figure>`,
+  </div>`,
   setup(props) {
     const data = Vue.reactive({
       sortBy: null,
@@ -283,11 +283,11 @@ export const NavBar = {
     </ul>
     <ul class="mobile-menu">
       <li>
-        <details role="list" dir="rtl" ref="menu">
-          <summary aria-haspopup="listbox" role="link" class="menu-btn">
+        <details class="dropdown" ref="menu">
+          <summary>
             <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="1.2rem" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
           </summary>
-          <ul role="listbox" dir="ltr">
+          <ul dir="rtl">
             <slot name="menu"></slot>
           </ul>
         </details>
@@ -354,23 +354,23 @@ export default {
 const sheet = new CSSStyleSheet()
 sheet.replaceSync(`/* Global */
 :root {
-  --success: var(--form-element-valid-border-color);
-  --error: var(--form-element-invalid-border-color);
+  --success: var(--pico-form-element-valid-border-color);
+  --error: var(--pico-form-element-invalid-border-color);
   --modal-duration: .2s;
   --toast-duration: .2s;
 }
 
 .compact:where(input:not([type=checkbox], [type=radio], [type=range]), select, textarea, button, [role=button]) {
-  padding: calc(0.75 * var(--form-element-spacing-vertical)) calc(0.75 * var(--form-element-spacing-horizontal)) !important;
-  height: calc(0.5rem * var(--line-height) + var(--form-element-spacing-vertical) * 1.75 + var(--border-width) * 1.75) !important;
+  padding: calc(0.75 * var(--pico-form-element-spacing-vertical)) calc(0.75 * var(--pico-form-element-spacing-horizontal)) !important;
+  height: calc(0.5rem * var(--pico-line-height) + var(--pico-form-element-spacing-vertical) * 1.75 + var(--pico-border-width) * 1.75) !important;
 }
 
 .success {
-  background: var(--ins-color) !important;
+  background: var(--success) !important;
 }
 
 .error {
-  background: var(--del-color) !important;
+  background: var(--error) !important;
 }
 
 label:has([required]):before {
