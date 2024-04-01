@@ -14,7 +14,7 @@ This is the suggested way to implement PicoVue, in the spirit of building web ap
 
 1. First, add Pico and Vue via CDN:
     ```html
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@2">
     <script src="https://unpkg.com/vue@3"></script>
     ```
 2. Then, import PicoVue in your module file:
