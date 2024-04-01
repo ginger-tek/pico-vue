@@ -1,6 +1,7 @@
 name: Publish pico-vue Package to NPM
 
 on:
+  workflow_dispatch:
   release:
     types: [created]
 
