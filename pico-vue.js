@@ -354,10 +354,11 @@ export default {
 const sheet = new CSSStyleSheet()
 sheet.replaceSync(`/* Global */
 :root {
-  --success: var(--pico-form-element-valid-border-color);
-  --error: var(--pico-form-element-invalid-border-color);
-  --modal-duration: .2s;
-  --toast-duration: .2s;
+  --pv-success: var(--pico-form-element-valid-border-color);
+  --pv-error: var(--pico-form-element-invalid-border-color);
+  --pv-modal-duration: .2s;
+  --pv-toast-duration: .2s;
+  --pv-transition: .2s;
 }
 
 .compact:where(input:not([type=checkbox], [type=radio], [type=range]), select, textarea, button, [role=button]) {
@@ -366,17 +367,17 @@ sheet.replaceSync(`/* Global */
 }
 
 .success {
-  background: var(--success) !important;
+  background: var(--pv-success) !important;
 }
 
 .error {
-  background: var(--error) !important;
+  background: var(--pv-error) !important;
 }
 
 label:has([required]):before {
   display: inline-block;
   content: '*';
-  color: var(--error);
+  color: var(--pv-error);
 }
 
 .row {
@@ -396,23 +397,23 @@ dialog {
 }
 
 dialog {
-  animation: fade-out-dialog var(--modal-duration) ease-out;
+  animation: fade-out-dialog var(--pv-modal-duration) ease-out;
 }
 
 dialog > article {
-  animation: fade-out-article var(--modal-duration) ease-out;
+  animation: fade-out-article var(--pv-modal-duration) ease-out;
 }
 
 dialog[open] {
-  animation: fade-in-dialog var(--modal-duration) ease-out;
+  animation: fade-in-dialog var(--pv-modal-duration) ease-out;
 }
 
 dialog[open] > article {
-  animation: fade-in-article var(--modal-duration) ease-out;
+  animation: fade-in-article var(--pv-modal-duration) ease-out;
 }
 
 dialog[open]::backdrop {
-  animation: backdrop-fade-in var(--modal-duration) ease-in forwards;
+  animation: backdrop-fade-in var(--pv-modal-duration) ease-in forwards;
 }
 
 dialog > article header .close {
@@ -505,7 +506,7 @@ details[role=list] ul li {
 }
 
 details[role=list] ul li:has(:not(a)):hover {
-  background-color: var(--dropdown-hover-background-color);
+  background-color: var(--pico-dropdown-hover-background-color);
 }
 
 /* Smart Table */
@@ -537,7 +538,7 @@ table thead .sorter {
 table thead .sort:before {
   cursor: pointer;
   display: block;
-  content: var(--icon-chevron);
+  content: var(--pico-icon-chevron);
   margin: 0;
   opacity: .5;
 }
@@ -561,8 +562,8 @@ figure.smart-table table {
 }
 
 figure.smart-table:has(table).bordered {
-  border: 1px solid var(--table-border-color);
-  border-radius: var(--border-radius);
+  border: 1px solid var(--pico-table-border-color);
+  border-radius: var(--pico-border-radius);
 }
 
 /* Alert */
@@ -572,11 +573,11 @@ figure.smart-table:has(table).bordered {
 
 [role=alert]:not(:empty) {
   display: block;
-  padding: var(--form-element-spacing-vertical) var(--form-element-spacing-horizontal);
-  border-radius: var(--border-radius);
+  padding: var(--pico-form-element-spacing-vertical) var(--pico-form-element-spacing-horizontal);
+  border-radius: var(--pico-border-radius);
   border: 1px solid rgba(0, 0, 0, .15);
-  margin-bottom: var(--spacing);
-  background: var(--secondary);
+  margin-bottom: var(--pico-spacing);
+  background: var(--pico-secondary);
   font-weight: 400;
   color: rgba(255, 255, 255, .9);
 }
@@ -637,14 +638,14 @@ figure.smart-table:has(table).bordered {
   gap: .25rem;
   position: relative;
   opacity: 0;
-  transition: var(--toast-duration);
+  transition: var(--pv-toast-duration);
   padding: 10px;
-  border-radius: var(--border-radius);
-  background: var(--secondary);
-  color: var(--secondary-inverse);
+  border-radius: var(--pico-border-radius);
+  background: var(--pico-secondary);
+  color: var(--pico-secondary-inverse);
   align-items: center;
   justify-content: space-between;
-  box-shadow: var(--card-box-shadow);
+  box-shadow: var(--pico-card-box-shadow);
   max-width: 500px;
   width: 100%;
 }
@@ -658,11 +659,11 @@ figure.smart-table:has(table).bordered {
   flex-shrink: 0;
   width: 1rem;
   height: 1rem;
-  background-image: var(--icon-close);
+  background-image: var(--pico-icon-close);
   background-position: center center;
   background-size: auto 1rem;
   background-repeat: no-repeat;
-  transition: opacity var(--transition);
+  transition: opacity var(--pv-transition);
   filter: brightness(0);
   opacity: .35;
   cursor: pointer;
@@ -728,7 +729,7 @@ figure.smart-table:has(table).bordered {
   border-radius: 50%;
   background: linear-gradient(to right, currentColor 0, currentColor 50%, transparent 50%);
   content: '';
-  transition: transform var(--transition);
+  transition: transform var(--pv-transition);
 }
 
 .theme-switch-wrap:hover .theme-switch-icon::after {
@@ -738,7 +739,7 @@ figure.smart-table:has(table).bordered {
 /* Tabs */
 .tabs header {
   padding-bottom: 0;
-  border-bottom: 1px solid var(--muted-border-color);
+  border-bottom: 1px solid var(--pico-muted-border-color);
 }
 
 .tabs header ul {
@@ -747,7 +748,7 @@ figure.smart-table:has(table).bordered {
   gap: .5em;
   margin-bottom: 0;
   padding: 0;
-  margin-bottom: calc(var(--font-size) - 1.07em);
+  margin-bottom: calc(var(--pico-font-size) - 1.07em);
   overflow: auto hidden;
 }
 
@@ -761,19 +762,19 @@ figure.smart-table:has(table).bordered {
   list-style-type: none;
   cursor: pointer;
   padding: 1em;
-  border-top-right-radius: var(--border-radius);
-  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--pico-border-radius);
+  border-top-left-radius: var(--pico-border-radius);
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-  background: var(--secondary-focus);
-  color: var(--contrast);
-  border: 1px solid var(--muted-border-color);
+  background: var(--pico-secondary-focus);
+  color: var(--pico-contrast);
+  border: 1px solid var(--pico-muted-border-color);
   margin-bottom: 0;
 }
 
 .tabs header .tab-btn.active {
   background: var(--card-background-color);
-  border-bottom-color: var(--card-background-color);
+  border-bottom-color: var(--pico-card-background-color);
 }
 
 /* NavBar */

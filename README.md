@@ -33,7 +33,7 @@ If you're building your Vue app via Vite or similar build-tools, you can still u
 
 1. First, install PicoCSS and PicoVue from p/npm:
     ```
-    npm install @picocss/pico @ginger-tek/pico-vue
+    npm install @picocss/pico@2 @ginger-tek/pico-vue
     ```
 2. Then, import PicoCSS and your App component:
     ```js
