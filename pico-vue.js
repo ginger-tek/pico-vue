@@ -309,7 +309,8 @@ export const NavBar = {
 
 export const Tab = {
   props: {
-    title: String
+    title: String,
+    persist: Boolean
   },
   template: `<div class="tab-content">
     <slot></slot>
@@ -328,7 +329,9 @@ export const Tabs = {
         </li>
       </ul>
     </header>
-    <component :is="slots.default()[active]"></component>
+    <keep-alive :include="[slots.default()[active].props.persist]">
+      <component :is="slots.default()[active]"></component>
+    </keep-alive>
   </article>`,
   setup() {
     const slots = Vue.useSlots()
@@ -772,7 +775,7 @@ figure.smart-table:has(table).bordered {
 }
 
 .tabs header .tab-btn.active {
-  background: var(--card-background-color);
+  background: var(--pico-card-background-color);
   border-bottom-color: var(--pico-card-background-color);
 }
 
