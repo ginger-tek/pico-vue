@@ -322,6 +322,7 @@ There are 2 named slots for content. Use `#brand` to define your "Home"/Logo con
 |---|---|---|
 |`title`|String|Makes all tab buttons stretch to fill the tab header|
 |`disabled`|Boolean|Disables the tab from being selectable|
+|`persist`|Boolean|Persists the tab component state between tab switches after the first mount|
 
 ### Examples
 ```html
@@ -332,7 +333,7 @@ There are 2 named slots for content. Use `#brand` to define your "Home"/Logo con
   <tab title="My Second Tab" disabled>
     ...
   </tab>
-  <tab title="My Third Tab">
+  <tab title="My Third Tab" persist>
     ...
   </tab>
 </tabs>
