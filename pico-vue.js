@@ -746,9 +746,8 @@ figure.smart-table:has(table).bordered {
   display: flex;
   justify-content: flex-start;
   gap: .5em;
-  margin-bottom: 0;
   padding: 0;
-  margin-bottom: calc(var(--pico-font-size) - 1.07em);
+  margin-bottom: -1px;
   overflow: auto hidden;
 }
 
