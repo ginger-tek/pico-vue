@@ -1,4 +1,4 @@
-# This repo is moving to [github.com/ginger-tek/picovue](github.com/ginger-tek/picovue)! Please update to this new and improved version going forward
+# This repo is moving to [https://github.com/ginger-tek/picovue](github.com/ginger-tek/picovue)! Please update to this new and improved version going forward
 
 <h1><img src="https://picocss.com/build/_assets/pico-logo-dark-E4VKKVAT.png" width="90px">&nbsp;<sup>&plus;</sup>&nbsp;<img src="https://vuejs.org/images/logo.png" width="40px"><br>pico-vue</h1>
 
