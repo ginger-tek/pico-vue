@@ -1,4 +1,4 @@
-# This repo is moving to [ginger-tek/picovue](https://github.com/ginger-tek/picovue)! Please update to this new and improved version going forward
+# This repo is no longer maintained. Please use [ginger-tek/picovue](https://github.com/ginger-tek/picovue) going forward.
 
 # pico-vue
 
